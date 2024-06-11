@@ -8,7 +8,7 @@ import "./Navbar.css";
 
 function NavbarHeader() {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="nav-body">
       <Container fluid>
         <Navbar.Brand href="#">
           {/* public 디렉토리의 monkey-ranky-logo2.png 가져오기*/}
@@ -32,7 +32,7 @@ function NavbarHeader() {
               className="me-2"
               aria-label="Search"
             />
-            <Button variant="outline-success">Search</Button>
+            <img src="/search-icon.svg" alt="Search" width="20" />
           </Form>
         </Navbar.Collapse>
       </Container>
