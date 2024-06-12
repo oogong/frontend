@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+// import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
 import { useState, useEffect } from "react";
@@ -38,6 +39,7 @@ function NavbarHeader() {
       return;
     }
     console.log(searchResult.code);
+    // navigate(`/detail?keyword=${searchResult.code}`); // 추후 router로 페이지 이동 작성
   };
 
   return (
@@ -83,6 +85,7 @@ function NavbarHeader() {
                 </div>
               )}
             </div>
+
             <Button
               variant="outline-light"
               type="submit"

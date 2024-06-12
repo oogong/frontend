@@ -6,7 +6,7 @@ import { getClusterData } from "../apis/scatterApi";
 export default function Scatter() {
   const [scatterData, setScatterData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const colorList = ["#FFB3BA", "#AEC6CF", "#B3E2CD", "#FFDAB9", "#D7BDE2"];
   useEffect(() => {
     getClusterData()
       .then((data) => {
@@ -34,7 +34,11 @@ export default function Scatter() {
         xFormat=" >-0,.2f"
         yScale={{ type: "linear", min: 0, max: 100 }}
         yFormat=">-.2f"
-        colors={{ scheme: "nivo" }}
+        // colors={{ scheme: "nivo" }}
+        colors={(point) => {
+          console.log(point);
+          return colorList[point.serieId];
+        }}
         blendMode="multiply"
         enableGridX={false}
         enableGridY={false}
