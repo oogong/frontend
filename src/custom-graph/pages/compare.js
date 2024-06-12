@@ -162,7 +162,10 @@ function CustomGraphCompare() {
             <p>오공 지수</p>
           </div>
         </div>
-        <Button variant="primary">결과보기</Button>
+        <Button className="primary">
+          <img src="graph-icon.svg" alt="graph" />
+          결과 보기
+        </Button>
       </div>
       <div className="custom-graph" ref={graphContainerRef}>
         {sections.map((section, index) => (
