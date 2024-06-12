@@ -26,18 +26,29 @@ import {
   convertToLocalTime,
   isNewDay,
   extractDatePart,
+  getLastActiveTime,
 } from "../services/timeService";
 
 const Comment = ({ roomCode, roomName }) => {
   const [userId, setUserId] = useState(""); // userId 설정
   const [messages, setMessages] = useState([]);
+  const [lastActive, setLastActive] = useState(null); // 마지막 활성화 시간을 저장하는 상태
 
   const handleMessages = loadedMessages => {
     setMessages(loadedMessages);
+
+    // 로드된 메시지가 있으면 가장 최근 메시지의 시간으로 lastActive를 갱신
+    if (loadedMessages.length > 0) {
+      const lastMessageTime = new Date(
+        loadedMessages[loadedMessages.length - 1].sendTime
+      );
+      setLastActive(lastMessageTime);
+    }
   };
 
   const handleNewMessage = message => {
     setMessages(prevMessages => [...prevMessages, message]);
+    setLastActive(new Date()); // 새로운 메시지가 도착할 때마다 마지막 활성화 시간을 갱신
   };
 
   useEffect(() => {
@@ -45,6 +56,12 @@ const Comment = ({ roomCode, roomName }) => {
     joinRoom(roomCode, roomName, handleMessages)
       .then(messages => {
         console.log("Messages loaded:", messages);
+        if (messages.length > 0) {
+          const lastMessageTime = new Date(
+            messages[messages.length - 1].sendTime
+          );
+          setLastActive(lastMessageTime); // 방에 메시지가 있으면 활성화 시간 갱신
+        }
       })
       .catch(error => {
         console.error("Error joining room:", error);
@@ -82,7 +99,7 @@ const Comment = ({ roomCode, roomName }) => {
         <ChatContainer>
           <ConversationHeader>
             <ConversationHeader.Content
-              info="Active 10 mins ago"
+              info={getLastActiveTime(lastActive)}
               userName={roomName}
             />
           </ConversationHeader>

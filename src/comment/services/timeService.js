@@ -21,4 +21,19 @@ const isNewDay = (currentMessageDate, previousMessageDate) => {
   return currentDate !== previousDate;
 };
 
-export { convertToLocalTime, isNewDay, extractDatePart };
+const getLastActiveTime = lastActive => {
+  if (!lastActive) {
+    return "Not yet active"; // 아직 활성화되지 않았을 때의 메시지
+  }
+
+  const now = new Date();
+  const minutesAgo = Math.floor((now - lastActive) / (1000 * 60));
+
+  if (minutesAgo === 0) {
+    return "Active now";
+  }
+
+  return `Active ${minutesAgo} mins ago`;
+};
+
+export { convertToLocalTime, isNewDay, extractDatePart, getLastActiveTime };
