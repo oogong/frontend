@@ -1,14 +1,9 @@
-import logo from './logo.svg';
-import './App.css';
-import Company from './company';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-
+import "./App.css";
+import mainRouter from "./main/pages/router";
+import { RouterProvider } from "react-router-dom";
 
 function App() {
-  return (
-    <Company />
-  );
+  return <RouterProvider router={mainRouter} />;
 }
 
 export default App;
