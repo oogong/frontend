@@ -20,6 +20,10 @@ function NavbarHeader() {
   const searchKeyword = async (event) => {
     event.preventDefault();
     const searchResult = await getSearchResult(keyword);
+    if (searchResult.code === 404) {
+      alert("해당 종목을 찾을 수 없습니다.");
+      return;
+    }
     console.log(searchResult.code);
     // navigate(`/detail?keyword=${searchResult.code}`); // 추후 router로 페이지 이동 작성
   };
