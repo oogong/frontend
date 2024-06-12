@@ -1,11 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
 
 const animalImages = [
-  "https://example.com/animal1.png",
-  "https://example.com/animal2.png",
-  "https://example.com/animal3.png",
-  // ... 17 more images
-  "https://example.com/animal20.png",
+  "../comment_assets/userImages/userLogo1.jpg",
+  "../comment_assets/userImages/userLogo2.jpg",
+  "../comment_assets/userImages/userLogo3.jpg",
+  "../comment_assets/userImages/userLogo4.jpg",
+  "../comment_assets/userImages/userLogo5.jpg",
+  "../comment_assets/userImages/userLogo6.jpg",
+  "../comment_assets/userImages/userLogo7.jpg",
+  "../comment_assets/userImages/userLogo8.jpg",
+  "../comment_assets/userImages/userLogo9.jpg",
+  "../comment_assets/userImages/userLogo10.jpg",
 ];
 
 const hashUuidToIndex = uuid => {
@@ -27,7 +32,7 @@ const getUserId = () => {
 
 const getAnimalImageFromUUID = uuid => {
   const index = hashUuidToIndex(uuid);
-  return animalImages[index];
+  return index + 1;
 };
 
 const getMessageDirection = uuid => {
