@@ -6,7 +6,7 @@ import { getClusterData } from "../apis/scatterApi";
 export default function Scatter() {
   const [scatterData, setScatterData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const colorList = ["red", "blue", "green", "yellow", "purple"];
+  const colorList = ["#FFB3BA", "#AEC6CF", "#B3E2CD", "#FFDAB9", "#D7BDE2"];
   useEffect(() => {
     getClusterData()
       .then((data) => {
