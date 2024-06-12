@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-export async function getStockRatios(stock_code){
-  const resp = axios.get(`/api/stocksDetail/${stock_code}`);
+// export async function getStockRatios(stock_code){
+//   const resp = axios.get(`/api/stocksDetail/${stock_code}`);
 
-  return (await resp).data;
-}
+//   return (await resp).data;
+// }
 
 const data = {
 	"code": "005930",
@@ -72,6 +72,6 @@ const data = {
   ]
 }
 
-// export function getStockRatios(stock_code){
-//   return data;
-// }
+export function getStockRatios(stock_code){
+  return data;
+}
