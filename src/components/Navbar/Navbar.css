@@ -6,3 +6,14 @@
 .me-auto .my-2 .my-lg-0 {
   max-height: 100px;
 }
+
+.searchForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.includedSearchForm {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+}
