@@ -1,6 +1,6 @@
 import React from "react";
 import Scatter from "../../clustering/components/scatter";
-import { Navbar } from "react-bootstrap/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 
 export default function main() {
   return (
