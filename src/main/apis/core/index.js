@@ -5,5 +5,5 @@ export const API = axios.create({
 });
 
 export const API_URL = {
-  LOCAL: "http://localhost:5000",
+  LOCAL: process.env.REACT_APP_LOCAL_API_URL,
 };
