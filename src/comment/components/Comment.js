@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
   MainContainer,
@@ -11,75 +11,115 @@ import {
   Avatar,
 } from "@chatscope/chat-ui-kit-react";
 import "./Comment.css";
+import {
+  joinRoom,
+  sendMessage,
+  receiveMessage,
+  disconnectSocket,
+} from "../services/messageService";
+import {
+  getMessageDirection,
+  getUserId,
+  getAnimalImageFromUUID,
+} from "../services/uuidService";
+import {
+  convertToLocalTime,
+  isNewDay,
+  extractDatePart,
+} from "../services/timeService";
 
-export default function Comment() {
+const Comment = ({ roomCode, roomName }) => {
+  const [userId, setUserId] = useState(""); // userId 설정
+  const [messages, setMessages] = useState([]);
+
+  const handleMessages = loadedMessages => {
+    setMessages(loadedMessages);
+  };
+
+  const handleNewMessage = message => {
+    setMessages(prevMessages => [...prevMessages, message]);
+  };
+
+  useEffect(() => {
+    // 방에 참가
+    joinRoom(roomCode, roomName, handleMessages)
+      .then(messages => {
+        console.log("Messages loaded:", messages);
+      })
+      .catch(error => {
+        console.error("Error joining room:", error);
+      });
+
+    // 새로운 메시지를 수신할 때 처리
+    receiveMessage(handleNewMessage);
+
+    // 컴포넌트 언마운트 시 소켓 연결 해제
+    return () => {
+      disconnectSocket();
+    };
+  }, [roomCode, roomName]);
+
+  useEffect(() => {
+    const storedUserId = getUserId();
+    setUserId(storedUserId);
+  }, []);
+
+  const handleSend = messageText => {
+    if (messageText) {
+      sendMessage(roomCode, userId, messageText)
+        .then(response => {
+          console.log("Message sent:", response);
+        })
+        .catch(error => {
+          console.error("Error sending message:", error);
+        });
+    }
+  };
+
   return (
     <div style={{ position: "relative", height: "100vh" }}>
       <MainContainer>
         <ChatContainer>
           <ConversationHeader>
-            <Avatar
-              name="Emily"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Samsung_Electronics_logo_%28hangul%29.svg/604px-Samsung_Electronics_logo_%28hangul%29.svg.png"
-            />
             <ConversationHeader.Content
               info="Active 10 mins ago"
-              userName="삼성전자"
+              userName={roomName}
             />
           </ConversationHeader>
           <MessageList>
-            {/* 빈 화면 일때 */}
-            {/* <MessageList.Content
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: "1.2em",
-                height: "100%",
-                justifyContent: "center",
-                textAlign: "center",
-              }}>
-              This is custom content placed instead of message list
-            </MessageList.Content> */}
-            <MessageSeparator
-              content="Saturday, 30 November 2019"
-              className="custom-separator" // 커스텀 클래스 추가
-            />
-            <Message
-              avatarPosition="tl"
-              model={{
-                message: "Hello my friend",
-                sentTime: "just now",
-                sender: "Joe",
-                direction: "outgoing",
-                position: "single",
-              }}>
-              <Avatar
-                name="Zoe"
-                size="md"
-                src="https://chatscope.io/storybook/react/assets/zoe-E7ZdmXF0.svg"
-              />
-              <Message.Footer sender="Joe" sentTime="just now" />
-            </Message>
-            <Message
-              avatarPosition="tl"
-              model={{
-                message: "Hello my kang",
-                sentTime: "just now",
-                sender: "kang",
-                direction: "incoming",
-              }}>
-              <Avatar
-                name="Zoe"
-                size="md"
-                src="https://chatscope.io/storybook/react/assets/zoe-E7ZdmXF0.svg"
-              />
-              <Message.Header sender="kang" sentTime="just now" />
-              <Message.Footer sender="kang" sentTime="just now" />
-            </Message>
+            {messages.map((msg, i) => (
+              <React.Fragment key={i}>
+                {i === 0 || isNewDay(msg.sendTime, messages[i - 1].sendTime) ? (
+                  <MessageSeparator
+                    content={extractDatePart(convertToLocalTime(msg.sendTime))}
+                    className="custom-separator"
+                  />
+                ) : null}
+                <Message
+                  avatarPosition="tl"
+                  model={{
+                    message: msg.content,
+                    sentTime: convertToLocalTime(msg.sendTime),
+                    sender: msg.senderId,
+                    direction: getMessageDirection(msg.senderId, userId),
+                    position: "single",
+                  }}>
+                  <Avatar
+                    size="md"
+                    src={require(`../comment_assets/userImages/userLogo${getAnimalImageFromUUID(
+                      msg.senderId
+                    )}.jpg`)}
+                  />
+                  <Message.Footer sentTime={convertToLocalTime(msg.sendTime)} />
+                </Message>
+              </React.Fragment>
+            ))}
           </MessageList>
-          <MessageInput placeholder="Type message here" />
+          <MessageInput placeholder="Type message here" onSend={handleSend} />
         </ChatContainer>
       </MainContainer>
     </div>
   );
-}
+};
+
+export default Comment;
