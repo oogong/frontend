@@ -27,19 +27,18 @@ jobs:
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           source: "./.env"
-          target: "/home/ubuntu/Client-V2"
+          target: "/home/ubuntu/Client-V2/frontend"
 
-      - name: executing remote ssh commands using key
-        uses: appleboy/ssh-action@master
+      - name: excuting remote ssh commands
+        uses: appleboy/ssh-action@v.0.1.6
         with:
           host: ${{ secrets.REMOTE_IP }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
-            cd /home/ubuntu/Client-V2
-            git pull origin main
             cd /home/ubuntu/Client-V2/frontend
+            git pull origin main
             # Install NVM and Node.js on the remote server
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
             export NVM_DIR="$HOME/.nvm"
