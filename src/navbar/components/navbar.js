@@ -15,7 +15,7 @@ function NavbarHeader() {
       <Container fluid>
         <Navbar.Brand href="#">
           <img
-            src="/monkey-ranky-logo2.png"
+            src={`${process.env.PUBLIC_URL}/monkey-ranky-logo2.png`}
             alt="Logo"
             width="120"
             className="d-inline-block align-top"
@@ -59,7 +59,11 @@ function NavbarHeader() {
               type="submit"
               className="search-button"
             >
-              <img src="/search-icon.svg" alt="Search" width="20" />
+              <img
+                src={`${process.env.PUBLIC_URL}/search-icon.svg`}
+                alt="Search"
+                width="20"
+              />
             </Button>
           </Form>
         </Navbar.Collapse>

@@ -164,7 +164,7 @@ function CustomGraph() {
           </div>
         </div>
         <Button className="primary">
-          <img src="graph-icon.svg" alt="graph" />
+          <img src={`${process.env.PUBLIC_URL}/graph-icon.svg`} alt="graph" />
           결과 보기
         </Button>
       </div>
@@ -188,7 +188,11 @@ function CustomGraph() {
       <div className="sample-list">
         <div>
           <div className="sample-info">
-            <img src="info-icon.svg" alt="info" width="20" />
+            <img
+              src={`${process.env.PUBLIC_URL}/info-icon.svg`}
+              alt="info"
+              width="20"
+            />
             <p>
               비율을 어떻게 설정해야할지 모르겠다면 아래 샘플을 이용해보세요!
             </p>
