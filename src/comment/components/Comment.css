@@ -1,0 +1,57 @@
+.custom-separator {
+  color: gray; /* 텍스트 색상 변경 */
+}
+
+.cs-message-separator::before,
+.cs-message-separator::after {
+  background-color: gray; /* 구분선 색상 변경 */
+}
+
+.cs-conversation-header {
+  background-color: lightgray;
+}
+
+.cs-conversation-header__content .cs-conversation-header__user-name {
+  background-color: lightgray;
+}
+
+.cs-conversation-header__content .cs-conversation-header__info {
+  background-color: lightgray;
+}
+
+.cs-message--incoming .cs-message__content {
+  background-color: lightgray;
+}
+
+.cs-message--outgoing .cs-message__content {
+  background-color: rgba(128, 128, 128, 0.537);
+}
+
+.cs-message-input__content-editor-wrapper {
+  background-color: lightgray;
+}
+
+.cs-message-input__content-editor {
+  background-color: lightgray;
+}
+
+.cs-button--attachment {
+  color: lightgray;
+}
+
+.cs-button--send {
+  color: lightgray;
+}
+
+.cs-button:not(:disabled) {
+  cursor: pointer;
+}
+
+.cs-button.cs-button--send:hover {
+  color: gray; /* 텍스트 색상 변경, 필요시 */
+  cursor: pointer; /* 마우스 포인터를 pointer로 변경 */
+}
+
+.cs-message__sent-time--incoming .cs-message__sent-time {
+  margin-left: 0;
+}
