@@ -30,7 +30,7 @@ jobs:
           target: "/home/ubuntu/Client-V2/frontend"
 
       - name: excuting remote ssh commands
-        uses: appleboy/ssh-action@v.0.1.6
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_IP }}
           username: ${{ secrets.REMOTE_USER }}
