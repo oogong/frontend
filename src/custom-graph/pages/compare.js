@@ -163,7 +163,7 @@ function CustomGraphCompare() {
           </div>
         </div>
         <Button className="primary">
-          <img src="graph-icon.svg" alt="graph" />
+          <img src={`${process.env.PUBLIC_URL}/graph-icon.svg`} alt="graph" />
           결과 보기
         </Button>
       </div>
