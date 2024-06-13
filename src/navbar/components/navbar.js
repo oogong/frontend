@@ -3,36 +3,17 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-// import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Navbar.css";
-import { useState } from "react";
-import { getSearchResult } from "./apis/NavbarApi";
+import "./styles/style.css";
+import { useKeyword, useIncludedResults } from "../hooks/navbar";
 
 function NavbarHeader() {
-  const [keyword, setKeyword] = useState("");
-  // const navigate = useNavigate();
-
-  const handleKeyword = (event) => {
-    setKeyword(event.target.value);
-  };
-
-  const searchKeyword = async (event) => {
-    event.preventDefault();
-    const searchResult = await getSearchResult(keyword);
-    if (searchResult.code === 404) {
-      alert("해당 종목을 찾을 수 없습니다.");
-      return;
-    }
-    console.log(searchResult.code);
-    // navigate(`/detail?keyword=${searchResult.code}`); // 추후 router로 페이지 이동 작성
-  };
-
+  const { keyword, setKeyword, handleKeyword, searchKeyword } = useKeyword();
+  const includedResults = useIncludedResults(keyword);
   return (
     <Navbar expand="lg" className="nav-body">
       <Container fluid>
         <Navbar.Brand href="#">
-          {/* public 디렉토리의 monkey-ranky-logo2.png 가져오기*/}
           <img
             src="/monkey-ranky-logo2.png"
             alt="Logo"
@@ -47,14 +28,32 @@ function NavbarHeader() {
             <Nav.Link href="#action2">서비스 소개</Nav.Link>
           </Nav>
           <Form className="d-flex" onSubmit={searchKeyword}>
-            <Form.Control
-              type="search"
-              placeholder="종목명으로 검색해보세요."
-              className="me-2"
-              aria-label="Search"
-              value={keyword}
-              onChange={handleKeyword}
-            />
+            <div className="searchForm">
+              <Form.Control
+                type="search"
+                placeholder="종목명으로 검색해보세요."
+                className="me-2"
+                aria-label="Search"
+                value={keyword}
+                onChange={handleKeyword}
+              ></Form.Control>
+              {includedResults.length > 0 && (
+                <div className="includedSearchForm">
+                  {includedResults.map((result, index) => (
+                    <a
+                      key={index}
+                      className="included-result"
+                      onClick={() => {
+                        setKeyword(result);
+                      }}
+                    >
+                      {result}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <Button
               variant="outline-light"
               type="submit"
