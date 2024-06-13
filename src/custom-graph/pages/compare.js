@@ -185,7 +185,11 @@ function CustomGraphCompare() {
         ))}
       </div>
       <div className="sample-info">
-        <img src="info-icon.svg" alt="info" width="20" />
+        <img
+          src={`${process.env.PUBLIC_URL}/info-icon.svg`}
+          alt="info"
+          width="20"
+        />
         <p>비율을 어떻게 설정해야할지 모르겠다면 아래 샘플을 이용해보세요!</p>
       </div>
       <div className="index-sample">
