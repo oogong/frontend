@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import "./main.css";
+import Scatter from "../../clustering/components/scatter";
 
 function CustomGraph() {
   const [sections, setSections] = useState([
@@ -184,61 +185,68 @@ function CustomGraph() {
           </div>
         ))}
       </div>
-      <div className="sample-info">
-        <img src="info-icon.svg" alt="info" width="20" />
-        <p>비율을 어떻게 설정해야할지 모르겠다면 아래 샘플을 이용해보세요!</p>
-      </div>
-      <div className="index-sample">
-        <label>
-          <input
-            type="radio"
-            id="sample2"
-            name="sample1"
-            value="sample2"
-            onClick={() => handleSample(0)}
-          />
-          <span>수익성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample1"
-            name="sample1"
-            value="sample1"
-            onClick={() => handleSample(1)}
-          />
-          <span>안정성</span>이 높으면 <span>수익성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample3"
-            name="sample1"
-            value="sample3"
-            onClick={() => handleSample(2)}
-          />
-          <span>활동성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample4"
-            name="sample1"
-            value="sample4"
-            onClick={() => handleSample(3)}
-          />
-          <span>생산성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample5"
-            name="sample1"
-            value="sample5"
-            onClick={() => handleSample(4)}
-          />
-          사람들의 <span>심리</span>가 제일 궁금해요!
-        </label>
+      <div className="sample-list">
+        <div>
+          <div className="sample-info">
+            <img src="info-icon.svg" alt="info" width="20" />
+            <p>
+              비율을 어떻게 설정해야할지 모르겠다면 아래 샘플을 이용해보세요!
+            </p>
+          </div>
+          <div className="index-sample">
+            <label>
+              <input
+                type="radio"
+                id="sample2"
+                name="sample1"
+                value="sample2"
+                onClick={() => handleSample(0)}
+              />
+              <span>수익성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample1"
+                name="sample1"
+                value="sample1"
+                onClick={() => handleSample(1)}
+              />
+              <span>안정성</span>이 높으면 <span>수익성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample3"
+                name="sample1"
+                value="sample3"
+                onClick={() => handleSample(2)}
+              />
+              <span>활동성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample4"
+                name="sample1"
+                value="sample4"
+                onClick={() => handleSample(3)}
+              />
+              <span>생산성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample5"
+                name="sample1"
+                value="sample5"
+                onClick={() => handleSample(4)}
+              />
+              사람들의 <span>심리</span>가 제일 궁금해요!
+            </label>
+          </div>
+        </div>
+        <Scatter />
       </div>
     </div>
   );

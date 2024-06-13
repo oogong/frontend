@@ -1,6 +1,6 @@
 import React from "react";
 import Scatter from "../../clustering/components/scatter";
-import NavbarHeader from "../../components/Navbar/Navbar";
+import NavbarHeader from "../../navbar/components/navbar";
 import CustomGraph from "../../custom-graph/pages/main";
 import CustomGraphCompare from "../../custom-graph/pages/compare";
 import { Row, Col, Container } from "react-bootstrap";
@@ -18,7 +18,6 @@ export default function main() {
             <CustomGraphCompare />
           </Col>
         </Row>
-        {/* <Scatter /> */}
       </Container>
     </>
   );

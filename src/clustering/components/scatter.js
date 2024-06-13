@@ -1,40 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ResponsiveScatterPlot } from "@nivo/scatterplot";
 import style from "./styles/style.css";
-import { getClusterData } from "../apis/scatterApi";
+import { useScatterData } from "../hooks/scatter";
 
 export default function Scatter() {
-  const [scatterData, setScatterData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { scatterData, loading } = useScatterData();
   const colorList = ["#FFB3BA", "#AEC6CF", "#B3E2CD", "#FFDAB9", "#D7BDE2"];
-  useEffect(() => {
-    getClusterData()
-      .then((data) => {
-        console.log(JSON.stringify(data));
-        setScatterData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching cluster data:", error);
-        setLoading(false);
-      });
-  }, []);
 
   if (loading) {
-    return <p>Loading...</p>; // 데이터 로딩 중일 때 표시할 내용
+    return <p>Loading...</p>;
   }
 
   return (
     <div id="scatter-plot-container">
-      <h1>Scatter Plot</h1>
       <ResponsiveScatterPlot
         data={scatterData}
-        margin={{ top: 60, right: 140, bottom: 70, left: 90 }}
+        margin={{ top: 30, right: 10, bottom: 30, left: 10 }}
         xScale={{ type: "linear", min: 0, max: 100 }}
         xFormat=" >-0,.2f"
         yScale={{ type: "linear", min: 0, max: 100 }}
         yFormat=">-.2f"
-        // colors={{ scheme: "nivo" }}
         colors={(point) => {
           console.log(point);
           return colorList[point.serieId];
