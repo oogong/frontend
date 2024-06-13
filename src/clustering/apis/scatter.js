@@ -4,7 +4,7 @@ import dummyRequest from "../datas/dummyRequest.json";
 
 export const getClusterData = () => {
   return axios
-    .post(`${API_URL.LOCAL}/api/cluster`, dummyRequest)
+    .post(`${API_URL.LOCAL}/api/cluster`, dummyRequest) // 추후 데이터 변경
     .then((response) => {
       return response.data;
     })

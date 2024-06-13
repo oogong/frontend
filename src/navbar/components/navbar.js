@@ -3,45 +3,13 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-// import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./Navbar.css";
-import { useState, useEffect } from "react";
-import { getSearchResult, getIncludedSearchResult } from "./apis/NavbarApi";
-import customDebounce from "./hooks/Debounce";
-import Dropdown from "react-bootstrap/Dropdown";
+import "./styles/style.css";
+import { useKeyword, useIncludedResults } from "../hooks/navbar";
 
 function NavbarHeader() {
-  const [keyword, setKeyword] = useState("");
-  const [includedResults, setIncludedResults] = useState([]);
-
-  const debouncedQuery = customDebounce(keyword, 500);
-
-  async function fetchIncludedSearchResult() {
-    const includedSearchResult = await getIncludedSearchResult(keyword);
-    console.log(includedSearchResult);
-    setIncludedResults(includedSearchResult || []);
-  }
-
-  useEffect(() => {
-    fetchIncludedSearchResult();
-  }, [debouncedQuery]);
-
-  const handleKeyword = (event) => {
-    setKeyword(event.target.value);
-  };
-
-  const searchKeyword = async (event) => {
-    event.preventDefault();
-    const searchResult = await getSearchResult(keyword);
-    if (searchResult.code === 404) {
-      alert("해당 종목을 찾을 수 없습니다.");
-      return;
-    }
-    console.log(searchResult.code);
-    // navigate(`/detail?keyword=${searchResult.code}`); // 추후 router로 페이지 이동 작성
-  };
-
+  const { keyword, setKeyword, handleKeyword, searchKeyword } = useKeyword();
+  const includedResults = useIncludedResults(keyword);
   return (
     <Navbar expand="lg" className="nav-body">
       <Container fluid>

@@ -1,9 +1,9 @@
 import axios from "axios";
-import { API_URL } from "../../../main/apis/core";
+import { API_URL } from "../../main/apis/core";
 
 export const getSearchResult = (name) => {
   return axios
-    .get(`${API_URL.LOCAL}/api/stocks/search/${name}`)
+    .get(`${API_URL.LOCAL}/api/corporates/search?keyword=${name}`)
     .then((response) => {
       return response.data;
     })
@@ -14,7 +14,7 @@ export const getSearchResult = (name) => {
 
 export const getIncludedSearchResult = (name) => {
   return axios
-    .get(`${API_URL.LOCAL}/api/stocks/include/${name}`)
+    .get(`${API_URL.LOCAL}/api/corporates/include?keyword=${name}`)
     .then((response) => {
       return response.data;
     })
