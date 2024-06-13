@@ -18,7 +18,6 @@ export default function main() {
             <CustomGraphCompare />
           </Col>
         </Row>
-        <Scatter />
       </Container>
     </>
   );

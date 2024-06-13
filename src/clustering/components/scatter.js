@@ -13,10 +13,9 @@ export default function Scatter() {
 
   return (
     <div id="scatter-plot-container">
-      <h1>Scatter Plot</h1>
       <ResponsiveScatterPlot
         data={scatterData}
-        margin={{ top: 60, right: 140, bottom: 70, left: 90 }}
+        margin={{ top: 30, right: 10, bottom: 30, left: 10 }}
         xScale={{ type: "linear", min: 0, max: 100 }}
         xFormat=" >-0,.2f"
         yScale={{ type: "linear", min: 0, max: 100 }}

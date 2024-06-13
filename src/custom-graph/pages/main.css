@@ -157,3 +157,8 @@ h3 {
 .index-sample > label {
   font-size: 15px;
 }
+
+.sample-list {
+  display: flex;
+  justify-content: space-between;
+}
