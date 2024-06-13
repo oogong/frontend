@@ -51,3 +51,7 @@
   color: gray; /* 텍스트 색상 변경, 필요시 */
   cursor: pointer; /* 마우스 포인터를 pointer로 변경 */
 }
+
+.cs-message__sent-time--incoming .cs-message__sent-time {
+  margin-left: 0;
+}

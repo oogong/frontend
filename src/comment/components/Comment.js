@@ -127,7 +127,13 @@ const Comment = ({ roomCode, roomName }) => {
                       msg.senderId
                     )}.jpg`)}
                   />
-                  <Message.Footer sentTime={convertToLocalTime(msg.sendTime)} />
+                  <Message.Footer
+                    className={`cs-message__sent-time--${getMessageDirection(
+                      msg.senderId,
+                      userId
+                    )}`}
+                    sentTime={convertToLocalTime(msg.sendTime)}
+                  />
                 </Message>
               </React.Fragment>
             ))}
