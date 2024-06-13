@@ -1,15 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import "./main.css";
 import Scatter from "../../clustering/components/scatter";
+import "./compare.css";
+import { WeightContext } from "../../weightedgraph/weightcontext";
 
-function CustomGraph() {
+function CustomGraphCompare() {
+  const { sliderValues, setSliderValues } = useContext(WeightContext);
   const [sections, setSections] = useState([
-    { name: "수익성", color: "#FF7676", percentage: 30 },
-    { name: "안정성", color: "#FFDD87", percentage: 10 },
-    { name: "활동성", color: "#91D600", percentage: 30 },
-    { name: "생산성", color: "#87D4FF", percentage: 25 },
-    { name: "오공 지수", color: "#C376FF", percentage: 5 },
+    { name: "수익성", color: "#FF7676", percentage: sliderValues[0] },
+    { name: "안정성", color: "#FFDD87", percentage: sliderValues[1] },
+    { name: "활동성", color: "#91D600", percentage: sliderValues[2] },
+    { name: "생산성", color: "#87D4FF", percentage: sliderValues[3] },
+    { name: "오공 지수", color: "#C376FF", percentage: sliderValues[4] },
   ]);
 
   const graphContainerRef = useRef(null);
@@ -23,12 +26,6 @@ function CustomGraph() {
     const deltaX =
       event.clientX - graphContainerRef.current.getBoundingClientRect().left;
 
-    console.log(
-      event.clientX,
-      graphContainerRef.current.getBoundingClientRect(),
-      deltaX
-    );
-
     let sumPercentage = 0;
     for (let i = 0; i < index; i++) {
       sumPercentage += sections[i].percentage;
@@ -38,7 +35,6 @@ function CustomGraph() {
     let currentPercentage =
       Math.round((deltaX / totalWidth) * 100) - sumPercentage;
     let adjustedPercentage = 0;
-    console.log(deltaX, totalWidth);
 
     if (index < updatedSections.length - 1) {
       const nextIndex = index + 1;
@@ -50,13 +46,11 @@ function CustomGraph() {
         0,
         Math.min(currentTotal, currentPercentage)
       );
-      // console.log(currentTotal, currentPercentage);
 
       updatedSections[index].percentage = adjustedPercentage;
       updatedSections[nextIndex].percentage = currentTotal - adjustedPercentage;
     }
 
-    // 조정 후 전체 합이 100%를 유지하도록 나머지 섹션 조정
     const total = updatedSections.reduce(
       (acc, section) => acc + section.percentage,
       0
@@ -65,10 +59,16 @@ function CustomGraph() {
     updatedSections[updatedSections.length - 1].percentage += difference;
 
     setSections(updatedSections);
+    setSliderValues(updatedSections.map((section) => section.percentage));
+
+    // 추가된 부분: sliderValues 상태 확인
+    console.log(
+      "Updated Slider Values: ",
+      updatedSections.map((section) => section.percentage)
+    );
   };
 
   const startDrag = (index) => {
-    console.log(index);
     const moveHandler = (event) => {
       handleMouseMove(event, index);
     };
@@ -83,63 +83,56 @@ function CustomGraph() {
   };
 
   const handleSample = (index) => {
-    switch (index) {
-      case 0:
-        // 수익성 50%, 안정성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 50 },
-          { name: "안정성", color: "#FFDD87", percentage: 5 },
-          { name: "활동성", color: "#91D600", percentage: 15 },
-          { name: "생산성", color: "#87D4FF", percentage: 15 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 1:
-        // 안정성 50%, 수익성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 5 },
-          { name: "안정성", color: "#FFDD87", percentage: 50 },
-          { name: "활동성", color: "#91D600", percentage: 15 },
-          { name: "생산성", color: "#87D4FF", percentage: 15 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 2:
-        // 활동성 50%, 안정성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 15 },
-          { name: "안정성", color: "#FFDD87", percentage: 5 },
-          { name: "활동성", color: "#91D600", percentage: 50 },
-          { name: "생산성", color: "#87D4FF", percentage: 15 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 3:
-        // 생산성 50%, 안정성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 15 },
-          { name: "안정성", color: "#FFDD87", percentage: 5 },
-          { name: "활동성", color: "#91D600", percentage: 15 },
-          { name: "생산성", color: "#87D4FF", percentage: 50 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 4:
-        // 오공 지수 60%, 나머지는 10%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 10 },
-          { name: "안정성", color: "#FFDD87", percentage: 10 },
-          { name: "활동성", color: "#91D600", percentage: 10 },
-          { name: "생산성", color: "#87D4FF", percentage: 10 },
-          { name: "오공 지수", color: "#C376FF", percentage: 60 },
-        ]);
-        break;
-    }
+    const samples = [
+      [
+        { name: "수익성", color: "#FF7676", percentage: 50 },
+        { name: "안정성", color: "#FFDD87", percentage: 5 },
+        { name: "활동성", color: "#91D600", percentage: 15 },
+        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 5 },
+        { name: "안정성", color: "#FFDD87", percentage: 50 },
+        { name: "활동성", color: "#91D600", percentage: 15 },
+        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 15 },
+        { name: "안정성", color: "#FFDD87", percentage: 5 },
+        { name: "활동성", color: "#91D600", percentage: 50 },
+        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 15 },
+        { name: "안정성", color: "#FFDD87", percentage: 5 },
+        { name: "활동성", color: "#91D600", percentage: 15 },
+        { name: "생산성", color: "#87D4FF", percentage: 50 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 10 },
+        { name: "안정성", color: "#FFDD87", percentage: 10 },
+        { name: "활동성", color: "#91D600", percentage: 10 },
+        { name: "생산성", color: "#87D4FF", percentage: 10 },
+        { name: "오공 지수", color: "#C376FF", percentage: 60 },
+      ],
+    ];
+    setSections(samples[index]);
+    setSliderValues(samples[index].map((section) => section.percentage));
+
+    // 추가된 부분: sliderValues 상태 확인
+    console.log(
+      "Sampled Slider Values: ",
+      samples[index].map((section) => section.percentage)
+    );
   };
 
   return (
     <div className="main-body">
-      <h3>순위</h3>
+      <h3>비교 순위</h3>
       <div className="index-info">
         <div className="index-name">
           <div className="profit">
@@ -246,10 +239,10 @@ function CustomGraph() {
             </label>
           </div>
         </div>
-        <Scatter />
+        {/* <Scatter /> */}
       </div>
     </div>
   );
 }
 
-export default CustomGraph;
+export default CustomGraphCompare;
