@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 
 // 서버 URL을 환경 변수에서 가져오거나 기본값으로 설정합니다.
 const CHAT_APP_SOCKET_URL =
-  process.env.CHAT_APP_SOCKET_URL || "http://localhost:3333";
+  process.env.REACT_APP_CHAT_SOCKET_URL || "http://localhost:5000";
 console.log(`Connecting to ${CHAT_APP_SOCKET_URL}/chat`);
 const socket = io(CHAT_APP_SOCKET_URL, {
   path: "/chat",
