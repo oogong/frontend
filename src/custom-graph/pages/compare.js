@@ -2,15 +2,17 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import "./compare.css";
-import { WeightContext } from "../../weightedgraph/weightcontext";
+import { WeightContext2 } from "../../weightedgraph/weightcontext2";
+import Scatter from "../../clustering/components/scatter";
 
 function CustomGraphCompare() {
+  const { sliderValues2, setSliderValues2 } = useContext(WeightContext2);
   const [sections, setSections] = useState([
-    { name: "수익성", color: "#FF7676", percentage: 30 },
-    { name: "안정성", color: "#FFDD87", percentage: 10 },
-    { name: "활동성", color: "#91D600", percentage: 30 },
-    { name: "생산성", color: "#87D4FF", percentage: 25 },
-    { name: "오공 지수", color: "#C376FF", percentage: 5 },
+    { name: "수익성", color: "#FF7676", percentage: sliderValues2[0] },
+    { name: "안정성", color: "#FFDD87", percentage: sliderValues2[1] },
+    { name: "활동성", color: "#91D600", percentage: sliderValues2[2] },
+    { name: "생산성", color: "#87D4FF", percentage: sliderValues2[3] },
+    { name: "오공 지수", color: "#C376FF", percentage: sliderValues2[4] },
   ]);
 
   const graphContainerRef = useRef(null);
@@ -66,6 +68,7 @@ function CustomGraphCompare() {
     updatedSections[updatedSections.length - 1].percentage += difference;
 
     setSections(updatedSections);
+    setSliderValues2(updatedSections.map((section) => section.percentage));
     console.log(sections);
   };
 
@@ -85,58 +88,51 @@ function CustomGraphCompare() {
   };
 
   const handleSample = (index) => {
-    switch (index) {
-      case 0:
-        // 수익성 50%, 안정성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 50 },
-          { name: "안정성", color: "#FFDD87", percentage: 5 },
-          { name: "활동성", color: "#91D600", percentage: 15 },
-          { name: "생산성", color: "#87D4FF", percentage: 15 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 1:
-        // 안정성 50%, 수익성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 5 },
-          { name: "안정성", color: "#FFDD87", percentage: 50 },
-          { name: "활동성", color: "#91D600", percentage: 15 },
-          { name: "생산성", color: "#87D4FF", percentage: 15 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 2:
-        // 활동성 50%, 안정성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 15 },
-          { name: "안정성", color: "#FFDD87", percentage: 5 },
-          { name: "활동성", color: "#91D600", percentage: 50 },
-          { name: "생산성", color: "#87D4FF", percentage: 15 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 3:
-        // 생산성 50%, 안정성 5%, 나머지는 15%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 15 },
-          { name: "안정성", color: "#FFDD87", percentage: 5 },
-          { name: "활동성", color: "#91D600", percentage: 15 },
-          { name: "생산성", color: "#87D4FF", percentage: 50 },
-          { name: "오공 지수", color: "#C376FF", percentage: 15 },
-        ]);
-        break;
-      case 4:
-        // 오공 지수 60%, 나머지는 10%씩
-        setSections([
-          { name: "수익성", color: "#FF7676", percentage: 10 },
-          { name: "안정성", color: "#FFDD87", percentage: 10 },
-          { name: "활동성", color: "#91D600", percentage: 10 },
-          { name: "생산성", color: "#87D4FF", percentage: 10 },
-          { name: "오공 지수", color: "#C376FF", percentage: 60 },
-        ]);
-        break;
-    }
+    const samples = [
+      [
+        { name: "수익성", color: "#FF7676", percentage: 50 },
+        { name: "안정성", color: "#FFDD87", percentage: 5 },
+        { name: "활동성", color: "#91D600", percentage: 15 },
+        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 5 },
+        { name: "안정성", color: "#FFDD87", percentage: 50 },
+        { name: "활동성", color: "#91D600", percentage: 15 },
+        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 15 },
+        { name: "안정성", color: "#FFDD87", percentage: 5 },
+        { name: "활동성", color: "#91D600", percentage: 50 },
+        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 15 },
+        { name: "안정성", color: "#FFDD87", percentage: 5 },
+        { name: "활동성", color: "#91D600", percentage: 15 },
+        { name: "생산성", color: "#87D4FF", percentage: 50 },
+        { name: "오공 지수", color: "#C376FF", percentage: 15 },
+      ],
+      [
+        { name: "수익성", color: "#FF7676", percentage: 10 },
+        { name: "안정성", color: "#FFDD87", percentage: 10 },
+        { name: "활동성", color: "#91D600", percentage: 10 },
+        { name: "생산성", color: "#87D4FF", percentage: 10 },
+        { name: "오공 지수", color: "#C376FF", percentage: 60 },
+      ],
+    ];
+    setSections(samples[index]);
+    setSliderValues2(samples[index].map((section) => section.percentage));
+
+    // 추가된 부분: sliderValues 상태 확인
+    console.log(
+      "Sampled Slider Values: ",
+      samples[index].map((section) => section.percentage)
+    );
   };
 
   return (
@@ -165,10 +161,6 @@ function CustomGraphCompare() {
             <p>오공 지수</p>
           </div>
         </div>
-        <Button className="primary">
-          <img src="graph-icon.svg" alt="graph" />
-          결과 보기
-        </Button>
       </div>
       <div className="custom-graph" ref={graphContainerRef}>
         {sections.map((section, index) => (
@@ -187,61 +179,68 @@ function CustomGraphCompare() {
           </div>
         ))}
       </div>
-      <div className="sample-info">
-        <img src="info-icon.svg" alt="info" width="20" />
-        <p>비율을 어떻게 설정해야할지 모르겠다면 아래 샘플을 이용해보세요!</p>
-      </div>
-      <div className="index-sample">
-        <label>
-          <input
-            type="radio"
-            id="sample2"
-            name="sample2"
-            value="sample2"
-            onClick={() => handleSample(0)}
-          />
-          <span>수익성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample1"
-            name="sample2"
-            value="sample1"
-            onClick={() => handleSample(1)}
-          />
-          <span>안정성</span>이 높으면 <span>수익성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample3"
-            name="sample2"
-            value="sample3"
-            onClick={() => handleSample(2)}
-          />
-          <span>활동성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample4"
-            name="sample2"
-            value="sample4"
-            onClick={() => handleSample(3)}
-          />
-          <span>생산성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
-        </label>
-        <label>
-          <input
-            type="radio"
-            id="sample5"
-            name="sample2"
-            value="sample5"
-            onClick={() => handleSample(4)}
-          />
-          사람들의 <span>심리</span>가 제일 궁금해요!
-        </label>
+      <div className="sample-list">
+        <div>
+          <div className="sample-info">
+            <img src="info-icon.svg" alt="info" width="20" />
+            <p>
+              비율을 어떻게 설정해야할지 모르겠다면 아래 샘플을 이용해보세요!
+            </p>
+          </div>
+          <div className="index-sample">
+            <label>
+              <input
+                type="radio"
+                id="sample2"
+                name="sample2"
+                value="sample2"
+                onClick={() => handleSample(0)}
+              />
+              <span>수익성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample1"
+                name="sample2"
+                value="sample1"
+                onClick={() => handleSample(1)}
+              />
+              <span>안정성</span>이 높으면 <span>수익성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample3"
+                name="sample2"
+                value="sample3"
+                onClick={() => handleSample(2)}
+              />
+              <span>활동성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample4"
+                name="sample2"
+                value="sample4"
+                onClick={() => handleSample(3)}
+              />
+              <span>생산성</span>이 높으면 <span>안정성</span>이 낮아도 좋아요!
+            </label>
+            <label>
+              <input
+                type="radio"
+                id="sample5"
+                name="sample2"
+                value="sample5"
+                onClick={() => handleSample(4)}
+              />
+              사람들의 <span>심리</span>가 제일 궁금해요!
+            </label>
+          </div>
+        </div>
+        <Scatter />
       </div>
     </div>
   );
