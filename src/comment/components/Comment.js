@@ -94,7 +94,7 @@ const Comment = ({ roomCode, roomName }) => {
   };
 
   return (
-    <div style={{ position: "relative", height: "100vh" }}>
+    <div style={{ position: "relative", height: "95vh" }}>
       <MainContainer>
         <ChatContainer>
           <ConversationHeader>
