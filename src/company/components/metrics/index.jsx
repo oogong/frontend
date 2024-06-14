@@ -16,10 +16,9 @@ export default function Matrix({ratio, color})  {
         }}
         barSize={40}
       >
-        <XAxis dataKey="matrix" scale="point" padding={{ left: 50, right: 50 }} />
+        <XAxis dataKey="matrix" scale="point" padding={{ left: 50, right: 50 }} tick={{fontSize:10}} />
         <YAxis />
         <Tooltip />
-        <Legend />
         <CartesianGrid strokeDasharray="3 3" />
         <Bar dataKey="rates" fill={color} background={{ fill: '#eee' }} />
       </BarChart>
