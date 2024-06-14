@@ -5,7 +5,7 @@ import Scatter from "../../clustering/components/scatter";
 import "./compare.css";
 import { WeightContext } from "../../weightedgraph/weightcontext";
 
-function CustomGraphCompare() {
+function CustomGraph() {
   const { sliderValues, setSliderValues } = useContext(WeightContext);
   const [sections, setSections] = useState([
     { name: "수익성", color: "#FF7676", percentage: sliderValues[0] },
@@ -132,7 +132,7 @@ function CustomGraphCompare() {
 
   return (
     <div className="main-body">
-      <h3>비교 순위</h3>
+      <h3>순위</h3>
       <div className="index-info">
         <div className="index-name">
           <div className="profit">
@@ -241,4 +241,4 @@ function CustomGraphCompare() {
   );
 }
 
-export default CustomGraphCompare;
+export default CustomGraph;
