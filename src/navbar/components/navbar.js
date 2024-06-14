@@ -5,11 +5,22 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
-import { useKeyword, useIncludedResults } from "../hooks/navbar";
+import {
+  useKeyword,
+  useIncludedResults,
+  useShowIncludedResults,
+} from "../hooks/navbar";
 
 function NavbarHeader() {
-  const { keyword, setKeyword, handleKeyword, searchKeyword } = useKeyword();
+  const { keyword, setKeyword, searchKeyword } = useKeyword();
   const includedResults = useIncludedResults(keyword);
+  const {
+    showIncludedResults,
+    handleKeyword,
+    handleIncludedResultClick,
+    wrapperRef,
+  } = useShowIncludedResults(setKeyword);
+
   return (
     <Navbar expand="lg" className="nav-body">
       <Container fluid>
@@ -28,7 +39,7 @@ function NavbarHeader() {
             <Nav.Link href="#action2">서비스 소개</Nav.Link>
           </Nav>
           <Form className="d-flex" onSubmit={searchKeyword}>
-            <div className="searchForm">
+            <div ref={wrapperRef} className="searchForm">
               <Form.Control
                 type="search"
                 placeholder="종목명으로 검색해보세요."
@@ -37,14 +48,14 @@ function NavbarHeader() {
                 value={keyword}
                 onChange={handleKeyword}
               ></Form.Control>
-              {includedResults.length > 0 && (
+              {showIncludedResults && includedResults.length > 0 && (
                 <div className="includedSearchForm">
                   {includedResults.map((result, index) => (
                     <a
                       key={index}
                       className="included-result"
                       onClick={() => {
-                        setKeyword(result);
+                        handleIncludedResultClick(result);
                       }}
                     >
                       {result}
