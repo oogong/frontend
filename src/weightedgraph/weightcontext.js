@@ -5,7 +5,7 @@ export const WeightContext = createContext();
 
 export const WeightProvider = ({ children }) => {
   console.log({ children });
-  const [sliderValues, setSliderValues] = useState([30, 10, 30, 25, 5]);
+  const [sliderValues, setSliderValues] = useState([20, 20, 20, 20, 20]);
 
   return (
     <WeightContext.Provider value={{ sliderValues, setSliderValues }}>
