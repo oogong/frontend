@@ -7,10 +7,6 @@ export const useKeyword = () => {
   const [keyword, setKeyword] = useState("");
   // const navigate = useNavigate();
 
-  const handleKeyword = (event) => {
-    setKeyword(event.target.value);
-  };
-
   const searchKeyword = async (event) => {
     event.preventDefault();
     const searchResult = await getSearchResult(keyword);
@@ -22,7 +18,7 @@ export const useKeyword = () => {
     // navigate(`/detail?keyword=${searchResult.code}`); // 추후 router로 페이지 이동 작성
   };
 
-  return { keyword, setKeyword, handleKeyword, searchKeyword };
+  return { keyword, setKeyword, searchKeyword };
 };
 
 export const useIncludedResults = (keyword) => {
@@ -40,4 +36,39 @@ export const useIncludedResults = (keyword) => {
   }, [debouncedQuery]);
 
   return includedResults;
+};
+
+export const useShowIncludedResults = (setKeyword) => {
+  const [showIncludedResults, setShowIncludedResults] = useState(false);
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setShowIncludedResults(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
+  const handleIncludedResultClick = (keyword) => {
+    setKeyword(keyword);
+    setShowIncludedResults(false);
+  };
+
+  const handleKeyword = (e) => {
+    setKeyword(e.target.value);
+    setShowIncludedResults(true);
+  };
+
+  return {
+    showIncludedResults,
+    handleKeyword,
+    handleIncludedResultClick,
+    wrapperRef,
+  };
 };
