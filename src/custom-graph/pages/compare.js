@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+// compare.js
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import "./compare.css";
+import { WeightContext } from "../../weightedgraph/weightcontext";
 
 function CustomGraphCompare() {
   const [sections, setSections] = useState([
@@ -37,7 +39,7 @@ function CustomGraphCompare() {
     let currentPercentage =
       Math.round((deltaX / totalWidth) * 100) - sumPercentage;
     let adjustedPercentage = 0;
-    console.log(deltaX, totalWidth);
+    // console.log(deltaX, totalWidth);
 
     if (index < updatedSections.length - 1) {
       const nextIndex = index + 1;
@@ -49,7 +51,7 @@ function CustomGraphCompare() {
         0,
         Math.min(currentTotal, currentPercentage)
       );
-      // console.log(currentTotal, currentPercentage);
+      console.log(currentTotal, currentPercentage);
 
       updatedSections[index].percentage = adjustedPercentage;
       updatedSections[nextIndex].percentage = currentTotal - adjustedPercentage;
@@ -64,6 +66,7 @@ function CustomGraphCompare() {
     updatedSections[updatedSections.length - 1].percentage += difference;
 
     setSections(updatedSections);
+    console.log(sections);
   };
 
   const startDrag = (index) => {
