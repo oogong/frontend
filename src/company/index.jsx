@@ -1,27 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import CompanyStock from './components/companyStock'
-import Metrics from './components/metrics'
+import React, { useEffect, useState } from "react";
+import CompanyStock from "./components/companyStock";
+import Metrics from "./components/metrics";
 
-import OgongRate from './components/ogongRate';
-import { getStockRatios } from './apis/stocks';
-import { Col, Container, Row } from 'react-bootstrap';
-import './components/styles/company.css'
+import OgongRate from "./components/ogongRate";
+import { getStockRatios } from "./apis/stocks";
+import { Col, Container, Row } from "react-bootstrap";
+import "./components/styles/company.css";
 
 export default function Company() {
   const [ratios, setRatios] = useState([]);
-  const indicatorName = ['수익성', '활동성', '안정성', '성장성'];
-  const rateColor = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300'];
+  const indicatorName = ["수익성", "활동성", "안정성", "성장성"];
+  const rateColor = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300"];
 
   useEffect(() => {
     setRatios(getStockRatios("00126380")); // CODE 추가하기
-  }, [])
+  }, []);
 
   return (
     <>
       <Container fluid>
         <Row>
-          <Col className='title' xs={2}>
-            <CompanyStock code={ratios.code} name={ratios.name} price={ratios.price} />
+          <Col className="title" xs={2}>
+            <CompanyStock
+              code={ratios.code}
+              name={ratios.name}
+              price={ratios.price}
+            />
           </Col>
           <Col xs={10}>
             <OgongRate rate={ratios.ogong_rate} />
@@ -46,8 +50,7 @@ export default function Company() {
             <Metrics ratio={ratios.activity} color={rateColor[3]} />
           </Col>
         </Row>
-
       </Container>
     </>
-  )
+  );
 }
