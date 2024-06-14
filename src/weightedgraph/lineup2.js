@@ -3,11 +3,11 @@ import * as d3 from "d3";
 import _ from "lodash";
 import weightData from "./weightcode.json";
 import { WeightContext } from "./weightcontext";
+import "./styles/style.css";
 
 const Lineup2 = () => {
   const { sliderValues } = useContext(WeightContext);
   const svgRef = useRef();
-  const titleRef = useRef();
   const [data, setData] = useState([]);
   const [rankOrigin, setRankOrigin] = useState({});
   const [rankWeighted, setRankWeighted] = useState({});
@@ -15,7 +15,7 @@ const Lineup2 = () => {
   useEffect(() => {
     const svg = d3
       .select(svgRef.current)
-      .attr("width", 1000)
+      .attr("width", 750)
       .attr("height", 1600);
     console.log("가중치데이터", weightData);
     setData(weightData);
@@ -88,13 +88,13 @@ const Lineup2 = () => {
       group = svg.append("g").attr("class", groupClass);
     }
 
-    const height = 36;
+    const height = 50;
     const widthScale = 12; // Scale factor for the bar widths
 
     const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
     // Exit
-    rows.exit().remove();
+    // rows.exit().remove();
 
     // Enter
     const rowsEnter = rows
@@ -107,25 +107,34 @@ const Lineup2 = () => {
       .append("rect")
       .attr("height", height)
       .attr("width", 750)
-      .attr("fill", "#f5f5f7");
+      .attr("fill", "#ffffff");
+
+    rowsEnter
+      .append("line")
+      .attr("x1", 0)
+      .attr("x2", 750)
+      .attr("y1", height - 1)
+      .attr("y2", height - 1)
+      .attr("stroke", "#000000") // Change this to your desired underline color
+      .attr("stroke-width", 1);
 
     rowsEnter
       .append("text")
-      .attr("y", 15)
+      .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 1)
-      .text((d, i) => `${i + 1}.`);
+      .text((d, i) => `${i + 1}`);
 
     rowsEnter
       .append("text")
-      .attr("y", 15)
+      .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 170)
       .text((d) => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
 
     rowsEnter
       .append("text")
-      .attr("y", 15)
+      .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 70)
       .text((d) => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
@@ -133,34 +142,38 @@ const Lineup2 = () => {
     rowsEnter
       .append("rect")
       .attr("class", "profit-bar")
-      .attr("height", height - 2)
+      .attr("y", 10)
+      .attr("height", height - 20)
       .attr("x", 350)
       .attr("fill", "#FF7676");
 
     rowsEnter
       .append("rect")
       .attr("class", "growth-bar")
-      .attr("height", height - 2)
+      .attr("y", 10)
+      .attr("height", height - 20)
       .attr("fill", "#FFDD87");
 
     rowsEnter
       .append("rect")
       .attr("class", "safety-bar")
-      .attr("height", height - 2)
+      .attr("y", 10)
+      .attr("height", height - 20)
       .attr("fill", "#91D600");
 
     rowsEnter
       .append("rect")
       .attr("class", "efficiency-bar")
-      .attr("height", height - 2)
+      .attr("y", 10)
+      .attr("height", height - 20)
       .attr("fill", "#87D4FF");
 
     rowsEnter
       .append("rect")
       .attr("class", "oogong-bar")
-      .attr("height", height - 2)
+      .attr("y", 10)
+      .attr("height", height - 20)
       .attr("fill", "#C376FF");
-
     // Update
     const rowsUpdate = rows
       .merge(rowsEnter)
@@ -217,7 +230,6 @@ const Lineup2 = () => {
   return (
     <footer>
       <div className="body_right">
-        {/* <div ref={titleRef} id="title_renderer"></div> */}
         <div id="renderer">
           <svg ref={svgRef}></svg>
         </div>
