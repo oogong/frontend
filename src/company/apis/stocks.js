@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { API_URL } from '../../main/apis/core'
 
 export async function getStockRatios(stock_code){
