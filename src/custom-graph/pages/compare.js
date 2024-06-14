@@ -240,7 +240,7 @@ function CustomGraphCompare() {
             </label>
           </div>
         </div>
-        <Scatter />
+        {/* <Scatter /> */}
       </div>
     </div>
   );
