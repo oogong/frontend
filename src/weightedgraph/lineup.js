@@ -146,35 +146,40 @@ const Lineup = () => {
       .attr("y", 10)
       .attr("height", height - 20)
       .attr("x", 350)
-      .attr("fill", "#FF7676");
+      .attr("fill", "#FF7676")
+      .attr("fill-opacity", 0.7);
 
     rowsEnter
       .append("rect")
       .attr("class", "growth-bar")
       .attr("y", 10)
       .attr("height", height - 20)
-      .attr("fill", "#FFDD87");
+      .attr("fill", "#FFDD87")
+      .attr("fill-opacity", 0.7);
 
     rowsEnter
       .append("rect")
       .attr("class", "safety-bar")
       .attr("y", 10)
       .attr("height", height - 20)
-      .attr("fill", "#91D600");
+      .attr("fill", "#91D600")
+      .attr("fill-opacity", 0.7);
 
     rowsEnter
       .append("rect")
       .attr("class", "efficiency-bar")
       .attr("y", 10)
       .attr("height", height - 20)
-      .attr("fill", "#87D4FF");
+      .attr("fill", "#87D4FF")
+      .attr("fill-opacity", 0.7);
 
     rowsEnter
       .append("rect")
       .attr("class", "oogong-bar")
       .attr("y", 10)
       .attr("height", height - 20)
-      .attr("fill", "#C376FF");
+      .attr("fill", "#C376FF")
+      .attr("fill-opacity", 0.7);
 
     // Update
     const rowsUpdate = rows
