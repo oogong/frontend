@@ -35,7 +35,7 @@ function NavbarHeader() {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-            <Nav.Link href="#action1">순위 비교</Nav.Link>
+            <Nav.Link href="/compare">순위 비교</Nav.Link>
             <Nav.Link href="#action2">서비스 소개</Nav.Link>
           </Nav>
           <Form className="d-flex" onSubmit={searchKeyword}>
