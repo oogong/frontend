@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import CompanyStock from './components/companyStock'
 import Metrics from './components/metrics'
 
@@ -9,11 +10,12 @@ import './components/styles/company.css'
 
 export default function Company() {
   const [ratios, setRatios] = useState([]);
+  const params = useParams();
   const indicatorName = ['수익성', '활동성', '안정성', '성장성'];
   const rateColor = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300'];
 
   useEffect(() => {
-    setRatios(getStockRatios("00126380")); // CODE 추가하기
+    setRatios(getStockRatios(params.code)); // CODE 추가하기 00126380
   }, [])
 
   return (

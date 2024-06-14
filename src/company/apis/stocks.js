@@ -1,10 +1,11 @@
 import axios from 'axios'
+import { API_URL } from '../../main/apis/core'
 
-// export async function getStockRatios(stock_code){
-//   const resp = axios.get(`/api/stocksDetail/${stock_code}`);
-
-//   return (await resp).data;
-// }
+export async function getStockRatios(stock_code){
+  const resp = await axios.get(`${API_URL.LOCAL}/api/stocksDetail/${stock_code}`);
+  console.log(resp);
+  return (await resp).data;
+}
 
 const data = {
 	"code": "005930",
@@ -72,6 +73,6 @@ const data = {
   ]
 }
 
-export function getStockRatios(stock_code){
-  return data;
-}
+// export function getStockRatios(stock_code){
+//   return data;
+// }
