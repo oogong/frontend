@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import * as d3 from "d3";
 import _ from "lodash";
 import weightData from "./weightcode.json";
-import { WeightContext } from "./weightcontext";
+import { WeightContext2 } from "./weightcontext2";
 
 const Lineup2 = () => {
-  const { sliderValues } = useContext(WeightContext);
+  const { sliderValues2 } = useContext(WeightContext2);
   const svgRef = useRef();
   const titleRef = useRef();
   const [data, setData] = useState([]);
@@ -26,9 +26,9 @@ const Lineup2 = () => {
   }, []);
 
   useEffect(() => {
-    console.log("L_listen", sliderValues);
-    L_listen(sliderValues, weightData);
-  }, [sliderValues]);
+    console.log("L_listen", sliderValues2);
+    L_listen(sliderValues2, weightData);
+  }, [sliderValues2]);
 
   const rankSort = async (w_d, w_s, w_n, w_m, w_q, data) => {
     console.log("가중치", w_d, w_s, w_n, w_m, w_q, data);
@@ -51,10 +51,10 @@ const Lineup2 = () => {
     return rank;
   };
 
-  const L_listen = async (sliderValues, d) => {
-    const [c0, c1, c2, c3, c4] = sliderValues;
+  const L_listen = async (sliderValues2, d) => {
+    const [c0, c1, c2, c3, c4] = sliderValues2;
     const svg = d3.select(svgRef.current);
-    console.log("Current Slider Values: ", sliderValues);
+    console.log("Current Slider Values: ", sliderValues2);
     console.log("data: ", d);
     rankSort(c0, c1, c2, c3, c4, d)
       .then((sortedData) => {
