@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { getSearchResult, getIncludedSearchResult } from "../apis/navbar";
 import useDebounce from "./debounce";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const useKeyword = () => {
   const [keyword, setKeyword] = useState("");
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const searchKeyword = async (event) => {
     event.preventDefault();
@@ -15,7 +15,7 @@ export const useKeyword = () => {
       return;
     }
     console.log(searchResult.code);
-    // navigate(`/detail?keyword=${searchResult.code}`); // 추후 router로 페이지 이동 작성
+    navigate(`/${searchResult.code}`); // 추후 router로 페이지 이동 작성
   };
 
   return { keyword, setKeyword, searchKeyword };
