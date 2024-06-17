@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { ResponsiveScatterPlot } from "@nivo/scatterplot";
+import { useScatterData, useBlinkNode } from "../hooks/scatter";
 import style from "./styles/style.css";
-import { useScatterData } from "../hooks/scatter";
 
 export default function Scatter() {
   const { scatterData, loading } = useScatterData();
+  const { setHoveredNode, RenderingNode } = useBlinkNode();
   const colorList = ["#FFB3BA", "#AEC6CF", "#B3E2CD", "#FFDAB9", "#D7BDE2"];
 
   if (loading) {
@@ -20,10 +21,7 @@ export default function Scatter() {
         xFormat=" >-0,.2f"
         yScale={{ type: "linear", min: 0, max: 100 }}
         yFormat=">-.2f"
-        colors={(point) => {
-          console.log(point);
-          return colorList[point.serieId];
-        }}
+        colors={(point) => colorList[point.serieId]}
         blendMode="multiply"
         enableGridX={false}
         enableGridY={false}
@@ -57,6 +55,9 @@ export default function Scatter() {
           precision: 0.01,
           velocity: 0,
         }}
+        onMouseEnter={(node) => setHoveredNode(node.id)}
+        onMouseLeave={() => setHoveredNode(null)}
+        nodeComponent={RenderingNode}
         legends={[]}
       />
     </div>
