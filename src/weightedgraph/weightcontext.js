@@ -3,14 +3,13 @@ import React, { createContext, useState } from "react";
 
 export const WeightContext = createContext();
 
-export const WeightProvider = ({ children }) => {
-  const [sliderValues, setSliderValues] = useState([20, 20, 20, 20, 20]);
+export const WeightProvider = ({ children, initialSliderValues }) => {
+  const [sliderValues, setSliderValues] = useState(initialSliderValues);
   const [stockList, setStockList] = useState([]);
 
   return (
     <WeightContext.Provider
-      value={{ sliderValues, setSliderValues, stockList, setStockList }}
-    >
+      value={{ sliderValues, setSliderValues, stockList, setStockList }}>
       {children}
     </WeightContext.Provider>
   );

@@ -1,11 +1,10 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import React, { useState, useRef, useContext } from "react";
 import "./main.css";
 import Scatter from "../../clustering/components/scatter";
-import "./compare.css";
+// import "./compare.css";
 import { WeightContext } from "../../weightedgraph/weightcontext";
 
-function CustomGraph() {
+function CustomGraph({ uniqueId, title }) {
   const { sliderValues, setSliderValues } = useContext(WeightContext);
   const [sections, setSections] = useState([
     { name: "수익성", color: "#FF7676", percentage: sliderValues[0] },
@@ -59,17 +58,17 @@ function CustomGraph() {
     updatedSections[updatedSections.length - 1].percentage += difference;
 
     setSections(updatedSections);
-    setSliderValues(updatedSections.map((section) => section.percentage));
+    setSliderValues(updatedSections.map(section => section.percentage));
 
     // 추가된 부분: sliderValues 상태 확인
     console.log(
       "Updated Slider Values: ",
-      updatedSections.map((section) => section.percentage)
+      updatedSections.map(section => section.percentage)
     );
   };
 
-  const startDrag = (index) => {
-    const moveHandler = (event) => {
+  const startDrag = index => {
+    const moveHandler = event => {
       handleMouseMove(event, index);
     };
 
@@ -82,7 +81,7 @@ function CustomGraph() {
     window.addEventListener("mouseup", upHandler);
   };
 
-  const handleSample = (index) => {
+  const handleSample = index => {
     const samples = [
       [
         { name: "수익성", color: "#FF7676", percentage: 50 },
@@ -121,18 +120,18 @@ function CustomGraph() {
       ],
     ];
     setSections(samples[index]);
-    setSliderValues(samples[index].map((section) => section.percentage));
+    setSliderValues(samples[index].map(section => section.percentage));
 
     // 추가된 부분: sliderValues 상태 확인
     console.log(
       "Sampled Slider Values: ",
-      samples[index].map((section) => section.percentage)
+      samples[index].map(section => section.percentage)
     );
   };
 
   return (
     <div className="main-body">
-      <h3>순위</h3>
+      <h3>{title}</h3>
       <div className="index-info">
         <div className="index-name">
           <div className="profit">
@@ -165,8 +164,7 @@ function CustomGraph() {
             style={{
               background: section.color,
               width: `${section.percentage}%`,
-            }}
-          >
+            }}>
             {section.percentage.toFixed(0)}%
             {index < sections.length - 1 && (
               <div className="handle" onMouseDown={() => startDrag(index)} />
@@ -186,8 +184,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample2"
-                name="sample1"
+                id={`${uniqueId}-sample2`}
+                name={`${uniqueId}-sample1`}
                 value="sample2"
                 onClick={() => handleSample(0)}
               />
@@ -196,8 +194,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample1"
-                name="sample1"
+                id={`${uniqueId}-sample1`}
+                name={`${uniqueId}-sample1`}
                 value="sample1"
                 onClick={() => handleSample(1)}
               />
@@ -206,8 +204,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample3"
-                name="sample1"
+                id={`${uniqueId}-sample3`}
+                name={`${uniqueId}-sample1`}
                 value="sample3"
                 onClick={() => handleSample(2)}
               />
@@ -216,8 +214,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample4"
-                name="sample1"
+                id={`${uniqueId}-sample4`}
+                name={`${uniqueId}-sample1`}
                 value="sample4"
                 onClick={() => handleSample(3)}
               />
@@ -226,8 +224,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample5"
-                name="sample1"
+                id={`${uniqueId}-sample5`}
+                name={`${uniqueId}-sample1`}
                 value="sample5"
                 onClick={() => handleSample(4)}
               />
