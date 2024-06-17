@@ -4,6 +4,7 @@ import _ from "lodash";
 import axios from "axios";
 import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
+import { API_URL } from "../main/apis/core";
 
 const Lineup = () => {
   const { sliderValues, setStockList } = useContext(WeightContext);
@@ -16,7 +17,7 @@ const Lineup = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://ec2-3-35-199-226.ap-northeast-2.compute.amazonaws.com/api/corporates/list"
+          `${API_URL.LOCAL}/api/corporates/list`
         );
         const weightData = response.data;
         setData(weightData);
@@ -66,6 +67,7 @@ const Lineup = () => {
     setStockList(
       sortedData.map((item) => ({
         id: item.id,
+        name: item.name,
         profitability: item.profit * sliderValues[0],
         stability: item.safety * sliderValues[2],
         activity: item.efficiency * sliderValues[3],

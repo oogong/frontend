@@ -5,6 +5,7 @@ export const getClusterData = (stockList) => {
   return axios
     .post(`${API_URL.LOCAL}/api/cluster`, { stockList: stockList }) // 추후 데이터 변경
     .then((response) => {
+      console.log(response.data);
       return response.data;
     })
     .catch((error) => {
