@@ -122,12 +122,6 @@ function CustomGraph() {
     ];
     setSections(samples[index]);
     setSliderValues(samples[index].map((section) => section.percentage));
-
-    // 추가된 부분: sliderValues 상태 확인
-    console.log(
-      "Sampled Slider Values: ",
-      samples[index].map((section) => section.percentage)
-    );
   };
 
   return (

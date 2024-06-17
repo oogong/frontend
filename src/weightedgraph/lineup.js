@@ -7,11 +7,24 @@ import "./styles/style.css";
 import { API_URL } from "../main/apis/core";
 
 const Lineup = () => {
-  const { sliderValues, setStockList } = useContext(WeightContext);
+  const { sliderValues, setStockList, colorList } = useContext(WeightContext);
   const svgRef = useRef();
   const [data, setData] = useState([]);
-  const [rankOrigin, setRankOrigin] = useState({});
-  const [rankWeighted, setRankWeighted] = useState({});
+  const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
+
+  useEffect(() => {
+    if (colorList.length > 0) {
+      data.forEach((item) => {
+        const colorMatch = colorList.find((color) =>
+          color.colorId.includes(item.id)
+        );
+        if (colorMatch) {
+          item.color = colorSample[colorMatch.id];
+        }
+      });
+      console.log("ColorAddData", data);
+    }
+  }, [colorList]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,7 +37,6 @@ const Lineup = () => {
         const sortedData = await rankSort(sliderValues, weightData);
         setData(sortedData);
         const initialRank = makeRank(weightData);
-        setRankOrigin(initialRank);
         const svg = d3
           .select(svgRef.current)
           .attr("width", 1000)
@@ -88,13 +100,12 @@ const Lineup = () => {
   const L_listen = async (sliderValues, d) => {
     const [c0, c1, c2, c3, c4] = sliderValues;
     const svg = d3.select(svgRef.current);
-    rankSort(sliderValues, d)
+    const sortedData = rankSort(sliderValues, d)
       .then((sortedData) => {
         setData(sortedData);
         return [sortedData, sortedData];
       })
       .then((newRank) => {
-        setRankWeighted(newRank[1]);
         return newRank[0];
       })
       .then((sortedData) =>
@@ -114,6 +125,7 @@ const Lineup = () => {
     weight_q,
     groupClass
   ) => {
+    console.log("updateData", data);
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
@@ -155,6 +167,15 @@ const Lineup = () => {
       .attr("font-size", 13)
       .attr("x", 1)
       .text((d, i) => `${i + 1}`);
+
+    rowsEnter
+      .append("rect")
+      .attr("class", "color-type")
+      .attr("y", 10)
+      .attr("height", height - 20)
+      .attr("x", 50)
+      .attr("width", 80)
+      .attr("fill", (d) => d.color);
 
     rowsEnter
       .append("text")

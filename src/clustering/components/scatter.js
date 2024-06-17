@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ResponsiveScatterPlot } from "@nivo/scatterplot";
 import { BasicTooltip } from "@nivo/tooltip";
 import { useScatterData, useBlinkNode } from "../hooks/scatter";
-import style from "./styles/style.css";
+import "./styles/style.css";
 
 export default function Scatter() {
   const { scatterData, loading } = useScatterData();
