@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import * as d3 from "d3";
 import _ from "lodash";
-import weightData from "./weightcode.json";
+import axios from "axios";
 import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
 
@@ -13,25 +13,39 @@ const Lineup = () => {
   const [rankWeighted, setRankWeighted] = useState({});
 
   useEffect(() => {
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", 750)
-      .attr("height", 1600);
-    console.log("가중치데이터", weightData);
-    setData(weightData);
-    const initialRank = makeRank(weightData);
-    console.log(initialRank);
-    setRankOrigin(initialRank);
-    update(weightData, svg, 20, 20, 20, 20, 20, "group1");
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://ec2-3-35-199-226.ap-northeast-2.compute.amazonaws.com/api/corporates/list"
+        );
+        const weightData = response.data;
+        console.log("Fetched data", weightData);
+        setData(weightData);
+        const initialRank = makeRank(weightData);
+        console.log(initialRank);
+        setRankOrigin(initialRank);
+        const svg = d3
+          .select(svgRef.current)
+          .attr("width", 1000)
+          .attr("height", 3600);
+        update(weightData, svg, 20, 20, 20, 20, 20, "group1");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
-    console.log("L_listen", sliderValues);
-    L_listen(sliderValues, weightData);
+    if (data.length > 0) {
+      console.log("L_listen", sliderValues);
+      L_listen(sliderValues, data);
+    }
   }, [sliderValues]);
 
   const rankSort = async (w_d, w_s, w_n, w_m, w_q, data) => {
-    console.log("가중치", w_d, w_s, w_n, w_m, w_q, data);
+    // console.log("Weights", w_d, w_s, w_n, w_m, w_q, data);
     const sortedData = _.sortBy(data, (each) => {
       const col =
         each["profit"] * w_d +
