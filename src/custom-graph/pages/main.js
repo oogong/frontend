@@ -1,11 +1,10 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import React, { useState, useRef, useContext } from "react";
 import "./main.css";
 import Scatter from "../../clustering/components/scatter";
-import "./compare.css";
+// import "./compare.css";
 import { WeightContext } from "../../weightedgraph/weightcontext";
 
-function CustomGraph() {
+function CustomGraph({ uniqueId, title }) {
   const { sliderValues, setSliderValues } = useContext(WeightContext);
   const [sections, setSections] = useState([
     { name: "수익성", color: "#FF7676", percentage: sliderValues[0] },
@@ -126,7 +125,7 @@ function CustomGraph() {
 
   return (
     <div className="main-body">
-      <h3>순위</h3>
+      <h3>{title}</h3>
       <div className="index-info">
         <div className="index-name">
           <div className="profit">
@@ -180,8 +179,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample2"
-                name="sample1"
+                id={`${uniqueId}-sample2`}
+                name={`${uniqueId}-sample1`}
                 value="sample2"
                 onClick={() => handleSample(0)}
               />
@@ -190,8 +189,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample1"
-                name="sample1"
+                id={`${uniqueId}-sample1`}
+                name={`${uniqueId}-sample1`}
                 value="sample1"
                 onClick={() => handleSample(1)}
               />
@@ -200,8 +199,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample3"
-                name="sample1"
+                id={`${uniqueId}-sample3`}
+                name={`${uniqueId}-sample1`}
                 value="sample3"
                 onClick={() => handleSample(2)}
               />
@@ -210,8 +209,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample4"
-                name="sample1"
+                id={`${uniqueId}-sample4`}
+                name={`${uniqueId}-sample1`}
                 value="sample4"
                 onClick={() => handleSample(3)}
               />
@@ -220,8 +219,8 @@ function CustomGraph() {
             <label>
               <input
                 type="radio"
-                id="sample5"
-                name="sample1"
+                id={`${uniqueId}-sample5`}
+                name={`${uniqueId}-sample1`}
                 value="sample5"
                 onClick={() => handleSample(4)}
               />

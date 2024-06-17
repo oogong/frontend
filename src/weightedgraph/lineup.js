@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import * as d3 from "d3";
-import _ from "lodash";
 import axios from "axios";
 import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
@@ -14,15 +13,20 @@ const Lineup = () => {
 
   useEffect(() => {
     if (colorList.length > 0) {
-      data.forEach((item) => {
-        const colorMatch = colorList.find((color) =>
-          color.colorId.includes(item.id)
-        );
-        if (colorMatch) {
-          item.color = colorSample[colorMatch.id];
-        }
-      });
-      console.log("ColorAddData", data);
+      setData((prevData) =>
+        prevData.map((item) => {
+          const colorMatch = colorList.find((color) =>
+            color.colorId.includes(item.id)
+          );
+          if (colorMatch) {
+            return {
+              ...item,
+              color: colorSample[colorMatch.id],
+            };
+          }
+          return item; // 기존 item을 그대로 반환
+        })
+      );
     }
   }, [colorList]);
 
@@ -34,14 +38,13 @@ const Lineup = () => {
         );
         const weightData = response.data;
         setData(weightData);
-        const sortedData = await rankSort(sliderValues, weightData);
+        const sortedData = rankSort(sliderValues, weightData);
         setData(sortedData);
-        const initialRank = makeRank(weightData);
         const svg = d3
           .select(svgRef.current)
           .attr("width", 1000)
-          .attr("height", 3600);
-        update(weightData, svg, 20, 20, 20, 20, 20, "group1");
+          .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
+        update(sortedData, svg, ...sliderValues, "group1");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -56,7 +59,7 @@ const Lineup = () => {
     }
   }, [sliderValues]);
 
-  const rankSort = async (sliderValues, data) => {
+  const rankSort = (sliderValues, data) => {
     const sortedData = data.sort((a, b) => {
       const colA =
         a.profit * sliderValues[0] +
@@ -71,9 +74,7 @@ const Lineup = () => {
         b.efficiency * sliderValues[3] +
         b.oogong_rate * sliderValues[4];
 
-      if (colA > colB) return -1;
-      if (colA < colB) return 1;
-      return 0;
+      return colB - colA; // 내림차순 정렬
     });
 
     setStockList(
@@ -91,31 +92,14 @@ const Lineup = () => {
     return sortedData;
   };
 
-  const makeRank = (data) => {
-    const rank = {};
-    data.forEach((d, i) => (rank[d.name] = i));
-    return rank;
-  };
-
-  const L_listen = async (sliderValues, d) => {
-    const [c0, c1, c2, c3, c4] = sliderValues;
+  const L_listen = (sliderValues, data) => {
     const svg = d3.select(svgRef.current);
-    const sortedData = rankSort(sliderValues, d)
-      .then((sortedData) => {
-        setData(sortedData);
-        return [sortedData, sortedData];
-      })
-      .then((newRank) => {
-        return newRank[0];
-      })
-      .then((sortedData) =>
-        update(sortedData, svg, c0, c1, c2, c3, c4, "group1")
-      );
-
-    return true;
+    const sortedData = rankSort(sliderValues, data);
+    setData(sortedData);
+    update(sortedData, svg, ...sliderValues, "group1");
   };
 
-  const update = async (
+  const update = (
     data,
     svg,
     weight_d,
@@ -125,19 +109,19 @@ const Lineup = () => {
     weight_q,
     groupClass
   ) => {
-    console.log("updateData", data);
+    console.log(data[0].color);
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
     }
 
     const height = 50;
-    const widthScale = 12; // Scale factor for the bar widths
+    const widthScale = 12;
 
     const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
     // Exit
-    // rows.exit().remove();
+    rows.exit().remove();
 
     // Enter
     const rowsEnter = rows
@@ -158,7 +142,7 @@ const Lineup = () => {
       .attr("x2", 750)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
-      .attr("stroke", "#000000") // Change this to your desired underline color
+      .attr("stroke", "#000000")
       .attr("stroke-width", 1);
 
     rowsEnter
@@ -168,14 +152,15 @@ const Lineup = () => {
       .attr("x", 1)
       .text((d, i) => `${i + 1}`);
 
-    rowsEnter
-      .append("rect")
-      .attr("class", "color-type")
-      .attr("y", 10)
-      .attr("height", height - 20)
-      .attr("x", 50)
-      .attr("width", 80)
-      .attr("fill", (d) => d.color);
+    // 색깔 불러오기
+    // rowsEnter
+    //   .append("rect")
+    //   .attr("class", "color-type") // 클래스 설정
+    //   .attr("y", 10) // y 위치
+    //   .attr("height", height - 20) // 높이 설정
+    //   .attr("x", 50) // x 위치
+    //   .attr("width", 80) // 너비 설정
+    //   .attr("fill", (d) => d.color); // 색상 설정
 
     rowsEnter
       .append("text")
@@ -241,12 +226,12 @@ const Lineup = () => {
 
     rowsUpdate
       .select(".profit-bar")
-      .style("width", (d) => (d["profit"] * weight_d) / widthScale + "px");
+      .style("width", (d) => (d.profit * weight_d) / widthScale + "px");
 
     rowsUpdate
       .select(".growth-bar")
-      .attr("x", (d) => 350 + (d["profit"] * weight_d) / widthScale)
-      .style("width", (d) => (d["growth"] * weight_s) / widthScale + "px");
+      .attr("x", (d) => 350 + (d.profit * weight_d) / widthScale)
+      .style("width", (d) => (d.growth * weight_s) / widthScale + "px");
 
     rowsUpdate
       .select(".safety-bar")
@@ -254,10 +239,10 @@ const Lineup = () => {
         "x",
         (d) =>
           350 +
-          (d["profit"] * weight_d) / widthScale +
-          (d["growth"] * weight_s) / widthScale
+          (d.profit * weight_d) / widthScale +
+          (d.growth * weight_s) / widthScale
       )
-      .style("width", (d) => (d["safety"] * weight_n) / widthScale + "px");
+      .style("width", (d) => (d.safety * weight_n) / widthScale + "px");
 
     rowsUpdate
       .select(".efficiency-bar")
@@ -265,11 +250,11 @@ const Lineup = () => {
         "x",
         (d) =>
           350 +
-          (d["profit"] * weight_d) / widthScale +
-          (d["growth"] * weight_s) / widthScale +
-          (d["safety"] * weight_n) / widthScale
+          (d.profit * weight_d) / widthScale +
+          (d.growth * weight_s) / widthScale +
+          (d.safety * weight_n) / widthScale
       )
-      .style("width", (d) => (d["efficiency"] * weight_m) / widthScale + "px");
+      .style("width", (d) => (d.efficiency * weight_m) / widthScale + "px");
 
     rowsUpdate
       .select(".oogong-bar")
@@ -277,12 +262,12 @@ const Lineup = () => {
         "x",
         (d) =>
           350 +
-          (d["profit"] * weight_d) / widthScale +
-          (d["growth"] * weight_s) / widthScale +
-          (d["safety"] * weight_n) / widthScale +
-          (d["efficiency"] * weight_m) / widthScale
+          (d.profit * weight_d) / widthScale +
+          (d.growth * weight_s) / widthScale +
+          (d.safety * weight_n) / widthScale +
+          (d.efficiency * weight_m) / widthScale
       )
-      .style("width", (d) => (d["oogong_rate"] * weight_q) / widthScale + "px");
+      .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
   };
 
   return (
