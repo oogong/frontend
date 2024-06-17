@@ -2,7 +2,6 @@ import React from "react";
 import Main from "../pages/main";
 import Detail from "../pages/detail";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Company from "../../company";
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/compare" replace /> },
