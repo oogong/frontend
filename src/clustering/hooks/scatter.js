@@ -1,23 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getClusterData } from "../apis/scatter";
 import { animated } from "@react-spring/web";
+import { WeightContext } from "../../weightedgraph/weightcontext";
 
 export const useScatterData = () => {
   const [scatterData, setScatterData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { stockList } = useContext(WeightContext);
 
   useEffect(() => {
-    getClusterData()
-      .then((data) => {
-        console.log(JSON.stringify(data));
-        setScatterData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching cluster data:", error);
-        setLoading(false);
-      });
-  }, []);
+    if (stockList.length > 0) {
+      getClusterData(stockList)
+        .then((data) => {
+          console.log("Data", data);
+          setScatterData(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching cluster data:", error);
+          setLoading(false);
+        });
+    }
+  }, [stockList]);
 
   return { scatterData, loading };
 };
