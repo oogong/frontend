@@ -1,0 +1,69 @@
+.ogong-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 40px;
+}
+
+.ogong-header h3 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.ogong-header .ogong-description {
+  display: flex;
+  gap: 3px;
+}
+
+.ogong-description p {
+  margin-bottom: 0;
+  font-size: 12px;
+  color: #474747;
+}
+
+.ogong-bar-chart {
+  position: relative;
+  background: linear-gradient(to right, #ff0000, #8000ff);
+  width: 100%;
+  height: 16px;
+  z-index: 1;
+}
+
+.ogong-bar-tag {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ogong-lines {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  top: -22px;
+}
+
+.ogong-lines p {
+  font-size: 12px;
+  color: #474747;
+  font-weight: 600;
+}
+
+.ogong-rate {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: -125px;
+  z-index: 1;
+}
+
+.ogong-rate p {
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ogong-rate img {
+  width: 45px;
+  border: 1px solid black;
+  border-radius: 100%;
+}
