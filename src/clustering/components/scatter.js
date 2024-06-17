@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { ResponsiveScatterPlot } from "@nivo/scatterplot";
+import { BasicTooltip } from "@nivo/tooltip";
+import { useScatterData, useBlinkNode } from "../hooks/scatter";
 import style from "./styles/style.css";
-import { useScatterData } from "../hooks/scatter";
 
 export default function Scatter() {
   const { scatterData, loading } = useScatterData();
-  const colorList = ["#FFB3BA", "#AEC6CF", "#B3E2CD", "#FFDAB9", "#D7BDE2"];
+  const { setHoveredNode, RenderingNode } = useBlinkNode();
+  const colorList = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
 
   if (loading) {
     return <p>Loading...</p>;
@@ -20,10 +22,7 @@ export default function Scatter() {
         xFormat=" >-0,.2f"
         yScale={{ type: "linear", min: 0, max: 100 }}
         yFormat=">-.2f"
-        colors={(point) => {
-          console.log(point);
-          return colorList[point.serieId];
-        }}
+        colors={(point) => colorList[point.serieId]}
         blendMode="multiply"
         enableGridX={false}
         enableGridY={false}
@@ -57,7 +56,12 @@ export default function Scatter() {
           precision: 0.01,
           velocity: 0,
         }}
-        legends={[]}
+        onMouseEnter={(node) => setHoveredNode(node.id)}
+        onMouseLeave={() => setHoveredNode(null)}
+        // nodeComponent={RenderingNode}
+        tooltip={({ node }) => (
+          <BasicTooltip value={node.data.name} color={node.color} enableChip />
+        )}
       />
     </div>
   );

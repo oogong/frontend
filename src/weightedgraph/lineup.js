@@ -4,9 +4,10 @@ import _ from "lodash";
 import axios from "axios";
 import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
+import { API_URL } from "../main/apis/core";
 
 const Lineup = () => {
-  const { sliderValues } = useContext(WeightContext);
+  const { sliderValues, setStockList } = useContext(WeightContext);
   const svgRef = useRef();
   const [data, setData] = useState([]);
   const [rankOrigin, setRankOrigin] = useState({});
@@ -16,13 +17,13 @@ const Lineup = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://ec2-3-35-199-226.ap-northeast-2.compute.amazonaws.com/api/corporates/list"
+          `${API_URL.LOCAL}/api/corporates/list`
         );
         const weightData = response.data;
-        console.log("Fetched data", weightData);
         setData(weightData);
+        const sortedData = await rankSort(sliderValues, weightData);
+        setData(sortedData);
         const initialRank = makeRank(weightData);
-        console.log(initialRank);
         setRankOrigin(initialRank);
         const svg = d3
           .select(svgRef.current)
@@ -39,38 +40,55 @@ const Lineup = () => {
 
   useEffect(() => {
     if (data.length > 0) {
-      console.log("L_listen", sliderValues);
       L_listen(sliderValues, data);
     }
   }, [sliderValues]);
 
-  const rankSort = async (w_d, w_s, w_n, w_m, w_q, data) => {
-    // console.log("Weights", w_d, w_s, w_n, w_m, w_q, data);
-    const sortedData = _.sortBy(data, (each) => {
-      const col =
-        each["profit"] * w_d +
-        each["growth"] * w_s +
-        each["safety"] * w_n +
-        each["efficiency"] * w_m +
-        each["oogong_rate"] * w_q;
-      return -col;
+  const rankSort = async (sliderValues, data) => {
+    const sortedData = data.sort((a, b) => {
+      const colA =
+        a.profit * sliderValues[0] +
+        a.growth * sliderValues[1] +
+        a.safety * sliderValues[2] +
+        a.efficiency * sliderValues[3] +
+        a.oogong_rate * sliderValues[4];
+      const colB =
+        b.profit * sliderValues[0] +
+        b.growth * sliderValues[1] +
+        b.safety * sliderValues[2] +
+        b.efficiency * sliderValues[3] +
+        b.oogong_rate * sliderValues[4];
+
+      if (colA > colB) return -1;
+      if (colA < colB) return 1;
+      return 0;
     });
+
+    setStockList(
+      sortedData.map((item) => ({
+        id: item.id,
+        name: item.name,
+        profitability: item.profit * sliderValues[0],
+        stability: item.safety * sliderValues[2],
+        activity: item.efficiency * sliderValues[3],
+        potential: item.growth * sliderValues[1],
+        ogoong_rate: item.oogong_rate * sliderValues[4],
+      }))
+    );
+
     return sortedData;
   };
 
   const makeRank = (data) => {
     const rank = {};
     data.forEach((d, i) => (rank[d.name] = i));
-    console.log(rank);
     return rank;
   };
 
   const L_listen = async (sliderValues, d) => {
     const [c0, c1, c2, c3, c4] = sliderValues;
     const svg = d3.select(svgRef.current);
-    console.log("Current Slider Values: ", sliderValues);
-    console.log("data: ", d);
-    rankSort(c0, c1, c2, c3, c4, d)
+    rankSort(sliderValues, d)
       .then((sortedData) => {
         setData(sortedData);
         return [sortedData, sortedData];
@@ -96,8 +114,6 @@ const Lineup = () => {
     weight_q,
     groupClass
   ) => {
-    console.log("update", groupClass);
-
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);

@@ -17,21 +17,17 @@ const Lineup2 = () => {
       .select(svgRef.current)
       .attr("width", 750)
       .attr("height", 1600);
-    console.log("가중치데이터", weightData);
     setData(weightData);
     const initialRank = makeRank(weightData);
-    console.log(initialRank);
     setRankOrigin(initialRank);
     update(weightData, svg, 20, 20, 20, 20, 20, "group1");
   }, []);
 
   useEffect(() => {
-    console.log("L_listen", sliderValues2);
     L_listen(sliderValues2, weightData);
   }, [sliderValues2]);
 
   const rankSort = async (w_d, w_s, w_n, w_m, w_q, data) => {
-    console.log("가중치", w_d, w_s, w_n, w_m, w_q, data);
     const sortedData = _.sortBy(data, (each) => {
       const col =
         each["profit"] * w_d +
@@ -47,15 +43,12 @@ const Lineup2 = () => {
   const makeRank = (data) => {
     const rank = {};
     data.forEach((d, i) => (rank[d.name] = i));
-    console.log(rank);
     return rank;
   };
 
   const L_listen = async (sliderValues2, d) => {
     const [c0, c1, c2, c3, c4] = sliderValues2;
     const svg = d3.select(svgRef.current);
-    console.log("Current Slider Values: ", sliderValues2);
-    console.log("data: ", d);
     rankSort(c0, c1, c2, c3, c4, d)
       .then((sortedData) => {
         setData(sortedData);
@@ -82,7 +75,6 @@ const Lineup2 = () => {
     weight_q,
     groupClass
   ) => {
-    console.log("update", groupClass);
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
