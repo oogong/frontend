@@ -23,7 +23,7 @@ function NavbarHeader() {
 
   return (
     <Navbar expand="lg" className="nav-body">
-      <Container fluid>
+      <Container fluid className="con-fluid">
         <Navbar.Brand href="#">
           <img
             src="/monkey-ranky-logo2.png"

@@ -34,7 +34,7 @@ export default function OgongRate(props) {
   console.log("textColor: " + textColor);
 
   return (
-    <div>
+    <div style={{flex:1}}>
       <div className="ogong-header">
         <h3>오공지수</h3>
         <div className="ogong-description">
@@ -47,23 +47,26 @@ export default function OgongRate(props) {
         <p></p>
       </div>
 
-      <div className="ogong-bar">
-        <div className="ogong-bar-chart" />
-        <div className="ogong-lines">
-          <img src="graph-line.png" alt="" />
-          <p>매우 부정</p>
-          <img src="graph-line.png" alt="" />
-          <p>부정</p>
-          <img src="graph-line.png" alt="" />
-          <p>긍정</p>
-          <img src="graph-line.png" alt="" />
-          <p>매우 긍정</p>
-          <img src="graph-line.png" alt="" />
+      <div style={{position:"relative"}}>
+        <div className="ogong-bar">
+          <div className="ogong-bar-chart" />
+          <div className="ogong-lines">
+            <img src="graph-line.png" alt="" />
+            <p>매우 부정</p>
+            <img src="graph-line.png" alt="" />
+            <p>부정</p>
+            <img src="graph-line.png" alt="" />
+            <p>긍정</p>
+            <img src="graph-line.png" alt="" />
+            <p>매우 긍정</p>
+            <img src="graph-line.png" alt="" />
+          </div>
         </div>
-      </div>
-      <div className="ogong-rate" style={{ left: sliderPosition }}>
-        <p style={{ color: textColor }}>{rate}%</p>
-        <img src="ogong.svg" alt="ogong" />
+        <div className="ogong-rate" style={{ left: sliderPosition }}>
+          <p style={{ color: textColor }}>{rate}%</p>
+          <img src="ogong.svg" alt="ogong" />
+        </div >
+
       </div>
     </div>
   );

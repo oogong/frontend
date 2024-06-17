@@ -4,6 +4,10 @@
   font-family: "Pretendard", sans-serif;
 }
 
+.con-fluid {
+  height: 5vh;
+}
+
 .me-auto .my-2 .my-lg-0 {
   max-height: 100px;
 }
