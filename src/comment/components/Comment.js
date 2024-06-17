@@ -16,18 +16,18 @@ import {
   sendMessage,
   receiveMessage,
   disconnectSocket,
-} from "../services/messageService";
+} from "../service/message";
 import {
   getMessageDirection,
   getUserId,
   getAnimalImageFromUUID,
-} from "../services/uuidService";
+} from "../service/uuid";
 import {
   convertToLocalTime,
   isNewDay,
   extractDatePart,
   getLastActiveTime,
-} from "../services/timeService";
+} from "../service/time";
 
 const Comment = ({ roomCode, roomName }) => {
   const [userId, setUserId] = useState(""); // userId 설정
