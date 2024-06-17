@@ -5,14 +5,14 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 export default function Matrix({ratio, color})  {
 
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={195}>
       <BarChart
         data={ratio}
         margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
         }}
         barSize={40}
       >

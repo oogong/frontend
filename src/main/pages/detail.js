@@ -28,7 +28,7 @@ export default function Detail() {
     <div style={{height:"100%"}}>
       <NavbarHeader />
       <Container fluid style={{padding:"0px"}}>
-        <Row>
+        <Row style={{alignItems: "flex-start"}}>
           <Col xs={8} sm={8} style={{padding:"0px"}}>
             <Company ratios={ratios} />
           </Col>
