@@ -65,7 +65,7 @@ const Lineup = () => {
     });
 
     setStockList(
-      sortedData.map((item) => ({
+      sortedData.map(item => ({
         id: item.id,
         name: item.name,
         profitability: item.profit * sliderValues[0],
@@ -79,7 +79,7 @@ const Lineup = () => {
     return sortedData;
   };
 
-  const makeRank = (data) => {
+  const makeRank = data => {
     const rank = {};
     data.forEach((d, i) => (rank[d.name] = i));
     return rank;
@@ -89,15 +89,15 @@ const Lineup = () => {
     const [c0, c1, c2, c3, c4] = sliderValues;
     const svg = d3.select(svgRef.current);
     rankSort(sliderValues, d)
-      .then((sortedData) => {
+      .then(sortedData => {
         setData(sortedData);
         return [sortedData, sortedData];
       })
-      .then((newRank) => {
+      .then(newRank => {
         setRankWeighted(newRank[1]);
         return newRank[0];
       })
-      .then((sortedData) =>
+      .then(sortedData =>
         update(sortedData, svg, c0, c1, c2, c3, c4, "group1")
       );
 
@@ -122,7 +122,7 @@ const Lineup = () => {
     const height = 50;
     const widthScale = 12; // Scale factor for the bar widths
 
-    const rows = group.selectAll("g.row").data(data, (d) => d.name);
+    const rows = group.selectAll("g.row").data(data, d => d.name);
 
     // Exit
     // rows.exit().remove();
@@ -161,14 +161,14 @@ const Lineup = () => {
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 170)
-      .text((d) => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
+      .text(d => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 70)
-      .text((d) => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
+      .text(d => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
 
     rowsEnter
       .append("rect")
@@ -220,48 +220,48 @@ const Lineup = () => {
 
     rowsUpdate
       .select(".profit-bar")
-      .style("width", (d) => (d["profit"] * weight_d) / widthScale + "px");
+      .style("width", d => (d["profit"] * weight_d) / widthScale + "px");
 
     rowsUpdate
       .select(".growth-bar")
-      .attr("x", (d) => 350 + (d["profit"] * weight_d) / widthScale)
-      .style("width", (d) => (d["growth"] * weight_s) / widthScale + "px");
+      .attr("x", d => 350 + (d["profit"] * weight_d) / widthScale)
+      .style("width", d => (d["growth"] * weight_s) / widthScale + "px");
 
     rowsUpdate
       .select(".safety-bar")
       .attr(
         "x",
-        (d) =>
+        d =>
           350 +
           (d["profit"] * weight_d) / widthScale +
           (d["growth"] * weight_s) / widthScale
       )
-      .style("width", (d) => (d["safety"] * weight_n) / widthScale + "px");
+      .style("width", d => (d["safety"] * weight_n) / widthScale + "px");
 
     rowsUpdate
       .select(".efficiency-bar")
       .attr(
         "x",
-        (d) =>
+        d =>
           350 +
           (d["profit"] * weight_d) / widthScale +
           (d["growth"] * weight_s) / widthScale +
           (d["safety"] * weight_n) / widthScale
       )
-      .style("width", (d) => (d["efficiency"] * weight_m) / widthScale + "px");
+      .style("width", d => (d["efficiency"] * weight_m) / widthScale + "px");
 
     rowsUpdate
       .select(".oogong-bar")
       .attr(
         "x",
-        (d) =>
+        d =>
           350 +
           (d["profit"] * weight_d) / widthScale +
           (d["growth"] * weight_s) / widthScale +
           (d["safety"] * weight_n) / widthScale +
           (d["efficiency"] * weight_m) / widthScale
       )
-      .style("width", (d) => (d["oogong_rate"] * weight_q) / widthScale + "px");
+      .style("width", d => (d["oogong_rate"] * weight_q) / widthScale + "px");
   };
 
   return (

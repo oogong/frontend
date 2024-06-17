@@ -1,31 +1,31 @@
 import React from "react";
 import NavbarHeader from "../../navbar/components/navbar";
 import CustomGraph from "../../custom-graph/pages/main";
-import CustomGraphCompare from "../../custom-graph/pages/compare";
 import "./styles/style.css";
 import Lineup from "../../weightedgraph/lineup";
-import Lineup2 from "../../weightedgraph/lineup2";
 import { Row, Col, Container } from "react-bootstrap";
 import { WeightProvider } from "../../weightedgraph/weightcontext";
-import { WeightProviderCompare } from "../../weightedgraph/weightcontext2";
 
 export default function main() {
+  const initialSliderValues = [30, 25, 15, 20, 10];
+  const initialSliderValues2 = [20, 20, 20, 20, 20];
+
   return (
     <div className="main-page">
       <NavbarHeader />
       <Container fluid>
         <Row>
           <Col xs={6}>
-            <WeightProvider>
-              <CustomGraph />
+            <WeightProvider initialSliderValues={initialSliderValues}>
+              <CustomGraph uniqueId="compare1" title="순위" />
               <Lineup />
             </WeightProvider>
           </Col>
           <Col xs={6}>
-            <WeightProviderCompare>
-              <CustomGraphCompare />
-              <Lineup2 />
-            </WeightProviderCompare>
+            <WeightProvider initialSliderValues={initialSliderValues2}>
+              <CustomGraph uniqueId="compare2" title="비교순위" />
+              <Lineup />
+            </WeightProvider>
           </Col>
         </Row>
       </Container>
