@@ -19,12 +19,10 @@ const Lineup = () => {
           "http://ec2-3-35-199-226.ap-northeast-2.compute.amazonaws.com/api/corporates/list"
         );
         const weightData = response.data;
-        console.log("Fetched data", weightData);
         setData(weightData);
         const sortedData = await rankSort(sliderValues, weightData);
         setData(sortedData);
         const initialRank = makeRank(weightData);
-        console.log(initialRank);
         setRankOrigin(initialRank);
         const svg = d3
           .select(svgRef.current)
@@ -41,7 +39,6 @@ const Lineup = () => {
 
   useEffect(() => {
     if (data.length > 0) {
-      console.log("L_listen", sliderValues);
       L_listen(sliderValues, data);
     }
   }, [sliderValues]);
@@ -83,15 +80,12 @@ const Lineup = () => {
   const makeRank = (data) => {
     const rank = {};
     data.forEach((d, i) => (rank[d.name] = i));
-    console.log(rank);
     return rank;
   };
 
   const L_listen = async (sliderValues, d) => {
     const [c0, c1, c2, c3, c4] = sliderValues;
     const svg = d3.select(svgRef.current);
-    console.log("Current Slider Values: ", sliderValues);
-    console.log("data: ", d);
     rankSort(sliderValues, d)
       .then((sortedData) => {
         setData(sortedData);
@@ -118,8 +112,6 @@ const Lineup = () => {
     weight_q,
     groupClass
   ) => {
-    console.log("update", groupClass);
-
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
