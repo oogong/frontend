@@ -76,7 +76,7 @@ const Comment = ({ roomCode, roomName }) => {
     return () => {
       disconnectSocket();
     };
-  }, [roomCode, roomName]);
+  }, [roomName]);
 
   useEffect(() => {
     const storedUserId = getUserId();
