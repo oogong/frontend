@@ -3,19 +3,29 @@ import { io } from "socket.io-client";
 // 서버 URL을 환경 변수에서 가져오거나 기본값으로 설정합니다.
 const CHAT_APP_SOCKET_URL =
   process.env.REACT_APP_LOCAL_API_URL || "http://localhost:5000";
-console.log(`Connecting to ${CHAT_APP_SOCKET_URL}/chat`);
-const socket = io(CHAT_APP_SOCKET_URL, {
-  path: "/chat",
-});
-socket.on("connection", () => {
-  console.log("Connected to the server");
-});
+
+let socket = null;
+
+export const connectSocket = () => {
+  if (!socket) {
+    console.log(`Connecting to ${CHAT_APP_SOCKET_URL}/chat`);
+    socket = io(CHAT_APP_SOCKET_URL, {
+      path: "/chat",
+    });
+
+    // socket.on("connection", () => {
+    //   console.log("Connected to the server");
+    // });
+  }
+  return socket;
+};
 
 export const joinRoom = (roomCode, roomName, handleMessages) => {
   return new Promise((resolve, reject) => {
     console.log(
       `Joining room with roomCode: ${roomCode}, roomName: ${roomName}`
     );
+    console.log("joinRoom Service 로직 실행됐어요");
     socket.emit("join room", { roomCode, roomName });
 
     socket.on("load messages", messages => {
@@ -62,6 +72,9 @@ export const receiveMessage = handleNewMessage => {
 };
 
 export const disconnectSocket = () => {
-  console.log("Disconnecting socket");
-  socket.disconnect();
+  if (socket) {
+    console.log("Disconnecting socket");
+    socket.disconnect();
+    socket = null;
+  }
 };
