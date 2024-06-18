@@ -12,10 +12,6 @@ export const connectSocket = () => {
     socket = io(CHAT_APP_SOCKET_URL, {
       path: "/chat",
     });
-
-    // socket.on("connection", () => {
-    //   console.log("Connected to the server");
-    // });
   }
   return socket;
 };
