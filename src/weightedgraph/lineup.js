@@ -6,11 +6,11 @@ import "./styles/style.css";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
 
-const Lineup = () => {
-  const { sliderValues, setStockList } = useContext(WeightContext);
-  const svgRef = useRef();
+const Lineup = ({ setStockList }) => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const { sliderValues } = useContext(WeightContext);
+  const svgRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +61,7 @@ const Lineup = () => {
     });
 
     setStockList(
-      sortedData.map(item => ({
+      sortedData.map((item) => ({
         id: item.id,
         name: item.name,
         profitability: item.profit * sliderValues[0],
@@ -100,12 +100,10 @@ const Lineup = () => {
     const height = 50;
     const widthScale = 30;
 
-    const rows = group.selectAll("g.row").data(data, d => d.name);
+    const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
-    // Exit
     rows.exit().remove();
 
-    // Enter
     const rowsEnter = rows
       .enter()
       .append("g")
@@ -149,14 +147,14 @@ const Lineup = () => {
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 170)
-      .text(d => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
+      .text((d) => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 70)
-      .text(d => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
+      .text((d) => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
 
     rowsEnter
       .append("rect")
@@ -199,7 +197,6 @@ const Lineup = () => {
       .attr("fill", "#C376FF")
       .attr("fill-opacity", 0.7);
 
-    // Update
     const rowsUpdate = rows
       .merge(rowsEnter)
       .transition()
@@ -208,48 +205,48 @@ const Lineup = () => {
 
     rowsUpdate
       .select(".profit-bar")
-      .style("width", d => (d.profit * weight_d) / widthScale + "px");
+      .style("width", (d) => (d.profit * weight_d) / widthScale + "px");
 
     rowsUpdate
       .select(".growth-bar")
-      .attr("x", d => 350 + (d.profit * weight_d) / widthScale)
-      .style("width", d => (d.growth * weight_s) / widthScale + "px");
+      .attr("x", (d) => 350 + (d.profit * weight_d) / widthScale)
+      .style("width", (d) => (d.growth * weight_s) / widthScale + "px");
 
     rowsUpdate
       .select(".safety-bar")
       .attr(
         "x",
-        d =>
+        (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
           (d.growth * weight_s) / widthScale
       )
-      .style("width", d => (d.safety * weight_n) / widthScale + "px");
+      .style("width", (d) => (d.safety * weight_n) / widthScale + "px");
 
     rowsUpdate
       .select(".efficiency-bar")
       .attr(
         "x",
-        d =>
+        (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
           (d.growth * weight_s) / widthScale +
           (d.safety * weight_n) / widthScale
       )
-      .style("width", d => (d.efficiency * weight_m) / widthScale + "px");
+      .style("width", (d) => (d.efficiency * weight_m) / widthScale + "px");
 
     rowsUpdate
       .select(".oogong-bar")
       .attr(
         "x",
-        d =>
+        (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
           (d.growth * weight_s) / widthScale +
           (d.safety * weight_n) / widthScale +
           (d.efficiency * weight_m) / widthScale
       )
-      .style("width", d => (d.oogong_rate * weight_q) / widthScale + "px");
+      .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
   };
 
   return (
