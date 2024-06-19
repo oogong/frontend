@@ -16,6 +16,7 @@ import {
   sendMessage,
   receiveMessage,
   disconnectSocket,
+  connectSocket,
 } from "../service/message";
 import {
   getMessageDirection,
@@ -36,7 +37,6 @@ const Comment = ({ roomCode, roomName }) => {
 
   const handleMessages = loadedMessages => {
     setMessages(loadedMessages);
-
     // 로드된 메시지가 있으면 가장 최근 메시지의 시간으로 lastActive를 갱신
     if (loadedMessages.length > 0) {
       const lastMessageTime = new Date(
@@ -52,6 +52,8 @@ const Comment = ({ roomCode, roomName }) => {
   };
 
   useEffect(() => {
+    //소켓 열기
+    connectSocket();
     // 방에 참가
     joinRoom(roomCode, roomName, handleMessages)
       .then(messages => {
@@ -74,7 +76,7 @@ const Comment = ({ roomCode, roomName }) => {
     return () => {
       disconnectSocket();
     };
-  }, [roomCode, roomName]);
+  }, [roomName]);
 
   useEffect(() => {
     const storedUserId = getUserId();
