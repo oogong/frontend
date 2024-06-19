@@ -4,11 +4,13 @@ import axios from "axios";
 import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
 import { API_URL } from "../main/apis/core";
+import { useNavigate } from "react-router-dom";
 
 const Lineup = () => {
   const { sliderValues, setStockList } = useContext(WeightContext);
   const svgRef = useRef();
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +23,6 @@ const Lineup = () => {
         const sortedData = rankSort(sliderValues, weightData);
         setData(sortedData);
 
-        //
         const svg = d3
           .select(svgRef.current)
           .attr("width", 1000)
@@ -97,7 +98,7 @@ const Lineup = () => {
     }
 
     const height = 50;
-    const widthScale = 12;
+    const widthScale = 30;
 
     const rows = group.selectAll("g.row").data(data, d => d.name);
 
@@ -109,10 +110,20 @@ const Lineup = () => {
       .enter()
       .append("g")
       .attr("class", "row")
-      .attr("transform", (d, i) => `translate(0, ${i * height})`);
+      .attr("transform", (d, i) => `translate(0, ${i * height})`)
+      .on("click", (event, d) => {
+        navigate(`/${d.id}`); // 추후 router로 페이지 이동 작성
+      })
+      .on("mouseenter", function (event, d) {
+        d3.select(this).select("rect.background").attr("fill", "#f0f0f0");
+      })
+      .on("mouseleave", function (event, d) {
+        d3.select(this).select("rect.background").attr("fill", "#ffffff");
+      });
 
     rowsEnter
       .append("rect")
+      .attr("class", "background")
       .attr("height", height)
       .attr("width", 750)
       .attr("fill", "#ffffff");
