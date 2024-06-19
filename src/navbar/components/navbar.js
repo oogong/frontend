@@ -1,8 +1,10 @@
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 import {
@@ -21,10 +23,16 @@ function NavbarHeader() {
     wrapperRef,
   } = useShowIncludedResults(setKeyword);
 
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/compare");
+  };
+
   return (
     <Navbar expand="lg" className="nav-body">
       <Container fluid className="con-fluid">
-        <Navbar.Brand href="#">
+        <Navbar.Brand onClick={handleLogoClick} style={{ cursor: "pointer" }}>
           <img
             src="/monkey-ranky-logo2.png"
             alt="Logo"
@@ -46,8 +54,7 @@ function NavbarHeader() {
                 className="me-2"
                 aria-label="Search"
                 value={keyword}
-                onChange={handleKeyword}
-              ></Form.Control>
+                onChange={handleKeyword}></Form.Control>
               {showIncludedResults && includedResults.length > 0 && (
                 <div className="includedSearchForm">
                   {includedResults.map((result, index) => (
@@ -56,8 +63,7 @@ function NavbarHeader() {
                       className="included-result"
                       onClick={() => {
                         handleIncludedResultClick(result);
-                      }}
-                    >
+                      }}>
                       {result}
                     </a>
                   ))}
@@ -68,8 +74,7 @@ function NavbarHeader() {
             <Button
               variant="outline-light"
               type="submit"
-              className="search-button"
-            >
+              className="search-button">
               <img src="/search-icon.svg" alt="Search" width="20" />
             </Button>
           </Form>
