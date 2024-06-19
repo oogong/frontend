@@ -18,6 +18,7 @@ export const useScatterData = () => {
             colorId: cluster.data.map((stock) => stock.id),
           }));
           setColorList(colorList);
+          console.log("ColorList", colorList);
           setLoading(false);
         })
         .catch((error) => {

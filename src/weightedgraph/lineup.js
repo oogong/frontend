@@ -15,25 +15,6 @@ const Lineup = () => {
   const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
 
   useEffect(() => {
-    if (colorList.length > 0) {
-      setData((prevData) =>
-        prevData.map((item) => {
-          const colorMatch = colorList.find((color) =>
-            color.colorId.includes(item.id)
-          );
-          if (colorMatch) {
-            return {
-              ...item,
-              color: colorSample[colorMatch.id],
-            };
-          }
-          return item; // 기존 item을 그대로 반환
-        })
-      );
-    }
-  }, [colorList]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -57,11 +38,33 @@ const Lineup = () => {
   }, []);
 
   useEffect(() => {
+    matchColor();
+  }, [colorList]);
+
+  useEffect(() => {
     if (data.length > 0) {
       L_listen(sliderValues, data);
     }
   }, [sliderValues]);
 
+  const matchColor = () => {
+    if (colorList.length > 0) {
+      setData((prevData) =>
+        prevData.map((item) => {
+          const colorMatch = colorList.find((color) =>
+            color.colorId.includes(item.id)
+          );
+          if (colorMatch) {
+            return {
+              ...item,
+              color: colorSample[colorMatch.id],
+            };
+          }
+          return item; // 기존 item을 그대로 반환
+        })
+      );
+    }
+  };
   const rankSort = (sliderValues, data) => {
     const sortedData = data.sort((a, b) => {
       const colA =
@@ -165,15 +168,13 @@ const Lineup = () => {
       .attr("x", 1)
       .text((d, i) => `${i + 1}`);
 
-    // 색깔 불러오기
-    // rowsEnter
-    //   .append("rect")
-    //   .attr("class", "color-type") // 클래스 설정
-    //   .attr("y", 10) // y 위치
-    //   .attr("height", height - 20) // 높이 설정
-    //   .attr("x", 50) // x 위치
-    //   .attr("width", 80) // 너비 설정
-    //   .attr("fill", (d) => d.color); // 색상 설정
+    rowsEnter
+      .append("rect")
+      .attr("class", "color-type")
+      .attr("y", 10)
+      .attr("height", height - 20)
+      .attr("x", 20)
+      .attr("fill", (d) => d.color);
 
     rowsEnter
       .append("text")
@@ -236,6 +237,11 @@ const Lineup = () => {
       .transition()
       .duration(1000)
       .attr("transform", (d, i) => `translate(0, ${i * height})`);
+
+    rowsUpdate
+      .select(".color-type")
+      .style("width", "30px")
+      .style("fill", (d) => d.color);
 
     rowsUpdate
       .select(".profit-bar")
