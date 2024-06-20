@@ -17,11 +17,11 @@ export default function main() {
         <Row className="align-items-start">
           <WeightProvider initialSliderValues={initialSliderValues}>
             <Col xs={6}>
-              <CustomGraph uniqueId="compare1" title="순위" />
+              <CustomGraph uniqueId="compare1" title="순위" visibleCluster={false} />
               <Lineup />
             </Col>
             <Col xs={6}>
-              <Scatter width={"100%"} height={"300px"}/>
+              <Scatter width="100%" height="50vh"/>
             </Col>
           </WeightProvider>
         </Row>
