@@ -4,7 +4,7 @@ import { BasicTooltip } from "@nivo/tooltip";
 import { useScatterData, useBlinkNode } from "../hooks/scatter";
 import style from "./styles/style.css";
 
-export default function Scatter() {
+export default function Scatter(props) {
   const { scatterData, loading } = useScatterData();
   const { setHoveredNode, RenderingNode } = useBlinkNode();
   const colorList = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
@@ -14,7 +14,7 @@ export default function Scatter() {
   }
 
   return (
-    <div id="scatter-plot-container">
+    <div id="scatter-plot-container" style={{width: `${props.width}`, height: `${props.height}`}}>
       <ResponsiveScatterPlot
         data={scatterData}
         margin={{ top: 30, right: 10, bottom: 30, left: 10 }}
