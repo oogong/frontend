@@ -16,7 +16,7 @@ export default function main() {
       <Container fluid>
         <Row className="align-items-start">
           <WeightProvider initialSliderValues={initialSliderValues}>
-            <Col xs={6}>
+            <Col xs={6} style={{borderRight:"1px solid rgba(0,0,0,0.1) "}}>
               <CustomGraph uniqueId="compare1" title="순위" visibleCluster={false} />
               <Lineup />
             </Col>
