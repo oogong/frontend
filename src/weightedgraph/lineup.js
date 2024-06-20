@@ -5,13 +5,15 @@ import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
+import { SortedDataContext } from "./sorteddatacontext";
 
 const Lineup = () => {
   const { sliderValues, setStockList, colorList } = useContext(WeightContext);
   const svgRef = useRef();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-
+  const { setSortedData2 } = useContext(SortedDataContext);
+  const [sortedData, setSortedData] = useState([]);
   const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
 
   useEffect(() => {
@@ -24,6 +26,7 @@ const Lineup = () => {
         setData(weightData);
         const sortedData = rankSort(sliderValues, weightData);
         setData(sortedData);
+        setSortedData(sortedData); // sortedData 설정
         const svg = d3
           .select(svgRef.current)
           .attr("width", 1000)
@@ -65,6 +68,7 @@ const Lineup = () => {
       );
     }
   };
+
   const rankSort = (sliderValues, data) => {
     const sortedData = data.sort((a, b) => {
       const colA =
@@ -94,7 +98,7 @@ const Lineup = () => {
         ogoong_rate: item.oogong_rate * sliderValues[4],
       }))
     );
-
+    setSortedData2(sortedData); //sortedData lineup2에 전달
     return sortedData;
   };
 
@@ -102,6 +106,7 @@ const Lineup = () => {
     const svg = d3.select(svgRef.current);
     const sortedData = rankSort(sliderValues, data);
     setData(sortedData);
+    setSortedData(sortedData); // sortedData 설정
     update(sortedData, svg, ...sliderValues, "group1");
   };
 
@@ -115,7 +120,6 @@ const Lineup = () => {
     weight_q,
     groupClass
   ) => {
-    console.log(data[0].color);
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
@@ -163,12 +167,13 @@ const Lineup = () => {
 
     rowsEnter
       .append("text")
+      .attr("class", "index-text")
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 1)
-      .text((d, i) => `${i + 1}`);
+      .text((d, i) => i + 1);
 
-    rowsEnter
+    rowsEnter //군집색상
       .append("rect")
       .attr("class", "color-type")
       .attr("y", 10)
@@ -237,6 +242,8 @@ const Lineup = () => {
       .transition()
       .duration(1000)
       .attr("transform", (d, i) => `translate(0, ${i * height})`);
+
+    rowsUpdate.select(".index-text").text((d, i) => i + 1);
 
     rowsUpdate
       .select(".color-type")
