@@ -7,10 +7,12 @@ import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
 
 const Lineup = () => {
-  const { sliderValues, setStockList } = useContext(WeightContext);
+  const { sliderValues, setStockList, colorList } = useContext(WeightContext);
   const svgRef = useRef();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+
+  const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +24,6 @@ const Lineup = () => {
         setData(weightData);
         const sortedData = rankSort(sliderValues, weightData);
         setData(sortedData);
-
         const svg = d3
           .select(svgRef.current)
           .attr("width", 1000)
@@ -37,11 +38,33 @@ const Lineup = () => {
   }, []);
 
   useEffect(() => {
+    matchColor();
+  }, [colorList]);
+
+  useEffect(() => {
     if (data.length > 0) {
       L_listen(sliderValues, data);
     }
   }, [sliderValues]);
 
+  const matchColor = () => {
+    if (colorList.length > 0) {
+      setData((prevData) =>
+        prevData.map((item) => {
+          const colorMatch = colorList.find((color) =>
+            color.colorId.includes(item.id)
+          );
+          if (colorMatch) {
+            return {
+              ...item,
+              color: colorSample[colorMatch.id],
+            };
+          }
+          return item; // 기존 item을 그대로 반환
+        })
+      );
+    }
+  };
   const rankSort = (sliderValues, data) => {
     const sortedData = data.sort((a, b) => {
       const colA =
@@ -61,7 +84,7 @@ const Lineup = () => {
     });
 
     setStockList(
-      sortedData.map(item => ({
+      sortedData.map((item) => ({
         id: item.id,
         name: item.name,
         profitability: item.profit * sliderValues[0],
@@ -92,6 +115,7 @@ const Lineup = () => {
     weight_q,
     groupClass
   ) => {
+    console.log(data[0].color);
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
@@ -100,7 +124,7 @@ const Lineup = () => {
     const height = 50;
     const widthScale = 30;
 
-    const rows = group.selectAll("g.row").data(data, d => d.name);
+    const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
     // Exit
     rows.exit().remove();
@@ -145,18 +169,26 @@ const Lineup = () => {
       .text((d, i) => `${i + 1}`);
 
     rowsEnter
+      .append("rect")
+      .attr("class", "color-type")
+      .attr("y", 10)
+      .attr("height", height - 20)
+      .attr("x", 20)
+      .attr("fill", (d) => d.color);
+
+    rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 170)
-      .text(d => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
+      .text((d) => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 70)
-      .text(d => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
+      .text((d) => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
 
     rowsEnter
       .append("rect")
@@ -207,49 +239,54 @@ const Lineup = () => {
       .attr("transform", (d, i) => `translate(0, ${i * height})`);
 
     rowsUpdate
+      .select(".color-type")
+      .style("width", "30px")
+      .style("fill", (d) => d.color);
+
+    rowsUpdate
       .select(".profit-bar")
-      .style("width", d => (d.profit * weight_d) / widthScale + "px");
+      .style("width", (d) => (d.profit * weight_d) / widthScale + "px");
 
     rowsUpdate
       .select(".growth-bar")
-      .attr("x", d => 350 + (d.profit * weight_d) / widthScale)
-      .style("width", d => (d.growth * weight_s) / widthScale + "px");
+      .attr("x", (d) => 350 + (d.profit * weight_d) / widthScale)
+      .style("width", (d) => (d.growth * weight_s) / widthScale + "px");
 
     rowsUpdate
       .select(".safety-bar")
       .attr(
         "x",
-        d =>
+        (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
           (d.growth * weight_s) / widthScale
       )
-      .style("width", d => (d.safety * weight_n) / widthScale + "px");
+      .style("width", (d) => (d.safety * weight_n) / widthScale + "px");
 
     rowsUpdate
       .select(".efficiency-bar")
       .attr(
         "x",
-        d =>
+        (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
           (d.growth * weight_s) / widthScale +
           (d.safety * weight_n) / widthScale
       )
-      .style("width", d => (d.efficiency * weight_m) / widthScale + "px");
+      .style("width", (d) => (d.efficiency * weight_m) / widthScale + "px");
 
     rowsUpdate
       .select(".oogong-bar")
       .attr(
         "x",
-        d =>
+        (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
           (d.growth * weight_s) / widthScale +
           (d.safety * weight_n) / widthScale +
           (d.efficiency * weight_m) / widthScale
       )
-      .style("width", d => (d.oogong_rate * weight_q) / widthScale + "px");
+      .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
   };
 
   return (

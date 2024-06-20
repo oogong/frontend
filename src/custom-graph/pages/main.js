@@ -58,17 +58,17 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
     updatedSections[updatedSections.length - 1].percentage += difference;
 
     setSections(updatedSections);
-    setSliderValues(updatedSections.map(section => section.percentage));
+    setSliderValues(updatedSections.map((section) => section.percentage));
 
     // 추가된 부분: sliderValues 상태 확인
     console.log(
       "Updated Slider Values: ",
-      updatedSections.map(section => section.percentage)
+      updatedSections.map((section) => section.percentage)
     );
   };
 
-  const startDrag = index => {
-    const moveHandler = event => {
+  const startDrag = (index) => {
+    const moveHandler = (event) => {
       handleMouseMove(event, index);
     };
 
@@ -81,7 +81,7 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
     window.addEventListener("mouseup", upHandler);
   };
 
-  const handleSample = index => {
+  const handleSample = (index) => {
     const samples = [
       [
         { name: "수익성", color: "#FF7676", percentage: 50 },
@@ -120,13 +120,7 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
       ],
     ];
     setSections(samples[index]);
-    setSliderValues(samples[index].map(section => section.percentage));
-
-    // 추가된 부분: sliderValues 상태 확인
-    console.log(
-      "Sampled Slider Values: ",
-      samples[index].map(section => section.percentage)
-    );
+    setSliderValues(samples[index].map((section) => section.percentage));
   };
 
   return (
@@ -164,7 +158,8 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
             style={{
               background: section.color,
               width: `${section.percentage}%`,
-            }}>
+            }}
+          >
             {section.percentage.toFixed(0)}%
             {index < sections.length - 1 && (
               <div className="handle" onMouseDown={() => startDrag(index)} />

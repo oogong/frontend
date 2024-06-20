@@ -6,14 +6,19 @@ import { WeightContext } from "../../weightedgraph/weightcontext";
 export const useScatterData = () => {
   const [scatterData, setScatterData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { stockList } = useContext(WeightContext);
+  const { stockList, setColorList } = useContext(WeightContext);
 
   useEffect(() => {
     if (stockList.length > 0) {
       getClusterData(stockList)
         .then((data) => {
-          console.log("Data", data);
           setScatterData(data);
+          const colorList = data.map((cluster) => ({
+            id: cluster.id,
+            colorId: cluster.data.map((stock) => stock.id),
+          }));
+          setColorList(colorList);
+          console.log("ColorList", colorList);
           setLoading(false);
         })
         .catch((error) => {
