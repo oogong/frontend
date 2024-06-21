@@ -31,7 +31,14 @@ const Lineup = () => {
           .select(svgRef.current)
           .attr("width", 1000)
           .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
-        update(sortedData, svg, ...sliderValues, "group1");
+        // 군집 색상 바로;
+        if (data != undefined && data.length > 0) {
+          matchColor().then((d) => {
+            console.log(d);
+            setData(d);
+            update(data, svg, ...sliderValues, "group1");
+          });
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -41,33 +48,45 @@ const Lineup = () => {
   }, []);
 
   useEffect(() => {
-    matchColor();
+    if (data != undefined && data.length > 0) {
+      matchColor().then((d) => {
+        console.log(d);
+        setData(d);
+        const svg = d3
+          .select(svgRef.current)
+          .attr("width", 1000)
+          .attr("height", d.length * 50); // 데이터 길이에 따라 높이 조정
+        return update(d, svg, ...sliderValues, "group1");
+      });
+    }
   }, [colorList]);
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (data != undefined && data.length > 0) {
       L_listen(sliderValues, data);
     }
   }, [sliderValues]);
 
-  const matchColor = () => {
+  const matchColor = async () => {
     if (colorList.length > 0) {
-      setData((prevData) =>
-        prevData.map((item) => {
-          const colorMatch = colorList.find((color) =>
-            color.colorId.includes(item.id)
-          );
-          if (colorMatch) {
-            return {
-              ...item,
-              color: colorSample[colorMatch.id],
-            };
-          }
-          return item; // 기존 item을 그대로 반환
-        })
-      );
+      const returnData = await data.map((item) => {
+        const colorMatch = colorList.find((color) =>
+          color.colorId.includes(item.id)
+        );
+        if (colorMatch) {
+          return {
+            ...item,
+            color: colorSample[colorMatch.id],
+          };
+        }
+        return item; // 기존 item을 그대로 반환
+      });
+      return returnData;
     }
+    return data; //
   };
+
+  console.log("삼", data);
 
   const rankSort = (sliderValues, data) => {
     const sortedData = data.sort((a, b) => {
@@ -110,7 +129,7 @@ const Lineup = () => {
     update(sortedData, svg, ...sliderValues, "group1");
   };
 
-  const update = (
+  const update = async (
     data,
     svg,
     weight_d,
@@ -120,6 +139,10 @@ const Lineup = () => {
     weight_q,
     groupClass
   ) => {
+    if (data === undefined) {
+      return;
+    }
+
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
@@ -127,6 +150,8 @@ const Lineup = () => {
 
     const height = 50;
     const widthScale = 30;
+
+    console.log("원", data);
 
     const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
@@ -245,7 +270,7 @@ const Lineup = () => {
 
     rowsUpdate.select(".index-text").text((d, i) => i + 1);
 
-    rowsUpdate
+    rowsUpdate //군집 색상
       .select(".color-type")
       .style("width", "30px")
       .style("fill", (d) => d.color);
