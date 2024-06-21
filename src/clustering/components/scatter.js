@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ResponsiveScatterPlot } from "@nivo/scatterplot";
 import { BasicTooltip } from "@nivo/tooltip";
-import { useScatterData, useBlinkNode } from "../hooks/scatter";
-import style from "./styles/style.css";
+import { useBlinkNode } from "../hooks/scatter";
+import { PlotContext } from "../hooks/PlotProvider";
+import { GroupColors } from "./colorByGroup";
 
 export default function Scatter(props) {
-  const { scatterData, loading } = useScatterData();
+  const { scatterData, loading } = useContext(PlotContext);
   const { setHoveredNode, RenderingNode } = useBlinkNode();
-  const colorList = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
+  const colorList = GroupColors;
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
   return (
-    <div id="scatter-plot-container" style={{width: `${props.width}`, height: `${props.height}`}}>
+    <div id="scatter-plot-container" style={{ width: `${props.width}`, height: `${props.height}` }}>
       <ResponsiveScatterPlot
         data={scatterData}
         margin={{ top: 30, right: 10, bottom: 30, left: 10 }}
