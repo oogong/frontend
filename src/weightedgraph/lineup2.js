@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import * as d3 from "d3";
+import _ from "lodash";
 import axios from "axios";
-import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
+import { WeightContext } from "./weightcontext";
+import { SortedDataContext } from "./sorteddatacontext";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
-import { SortedDataContext } from "./sorteddatacontext";
-
-const Lineup = () => {
+const Lineup2 = () => {
+  const { sortedData2 } = useContext(SortedDataContext);
   const { sliderValues, setStockList, colorList } = useContext(WeightContext);
-  const svgRef = useRef();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-  const { setSortedData2 } = useContext(SortedDataContext);
-  const [sortedData, setSortedData] = useState([]);
+  const svgRef = useRef();
   const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
 
   useEffect(() => {
@@ -26,12 +25,12 @@ const Lineup = () => {
         setData(weightData);
         const sortedData = rankSort(sliderValues, weightData);
         setData(sortedData);
-        setSortedData(sortedData); // sortedData 설정
+
         const svg = d3
           .select(svgRef.current)
           .attr("width", 1000)
           .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
-        update(sortedData, svg, ...sliderValues, "group1");
+        update(sortedData, svg, ...sliderValues, "group1", []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -98,16 +97,35 @@ const Lineup = () => {
         ogoong_rate: item.oogong_rate * sliderValues[4],
       }))
     );
-    setSortedData2(sortedData); //sortedData lineup2에 전달
+    const newarray = difrank(sortedData, sortedData2);
+    update(
+      sortedData,
+      d3.select(svgRef.current),
+      ...sliderValues,
+      "group1",
+      newarray
+    );
     return sortedData;
+  };
+
+  const difrank = (sortedData, sortedData2) => {
+    const newarray = [];
+    for (let i = 0; i < sortedData.length; i++) {
+      for (let j = 0; j < sortedData2.length; j++) {
+        if (sortedData[i].id === sortedData2[j].id) {
+          newarray.push(j - i);
+        }
+      }
+    }
+    return newarray;
   };
 
   const L_listen = (sliderValues, data) => {
     const svg = d3.select(svgRef.current);
     const sortedData = rankSort(sliderValues, data);
     setData(sortedData);
-    setSortedData(sortedData); // sortedData 설정
-    update(sortedData, svg, ...sliderValues, "group1");
+    const newarray = difrank(sortedData, sortedData2);
+    update(sortedData, svg, ...sliderValues, "group1", newarray);
   };
 
   const update = (
@@ -118,7 +136,8 @@ const Lineup = () => {
     weight_n,
     weight_m,
     weight_q,
-    groupClass
+    groupClass,
+    newarray
   ) => {
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
@@ -130,10 +149,8 @@ const Lineup = () => {
 
     const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
-    // Exit
     rows.exit().remove();
 
-    // Enter
     const rowsEnter = rows
       .enter()
       .append("g")
@@ -236,7 +253,14 @@ const Lineup = () => {
       .attr("fill", "#C376FF")
       .attr("fill-opacity", 0.7);
 
-    // Update
+    rowsEnter
+      .append("text")
+      .attr("class", "newarray-text")
+      .attr("y", 30)
+      .attr("font-size", 15)
+      .attr("x", 800)
+      .text((d, i) => newarray[i]);
+
     const rowsUpdate = rows
       .merge(rowsEnter)
       .transition()
@@ -294,6 +318,8 @@ const Lineup = () => {
           (d.efficiency * weight_m) / widthScale
       )
       .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
+
+    rowsUpdate.select(".newarray-text").text((d, i) => newarray[i]);
   };
 
   return (
@@ -307,4 +333,4 @@ const Lineup = () => {
   );
 };
 
-export default Lineup;
+export default Lineup2;
