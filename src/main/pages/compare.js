@@ -3,8 +3,11 @@ import NavbarHeader from "../../navbar/components/navbar";
 import CustomGraph from "../../custom-graph/pages/main";
 import "./styles/style.css";
 import Lineup from "../../weightedgraph/lineup";
+import Lineup2 from "../../weightedgraph/lineup2";
 import { Row, Col, Container } from "react-bootstrap";
 import { WeightProvider } from "../../weightedgraph/weightcontext";
+import { SortedDataProvider } from "../../weightedgraph/sorteddatacontext";
+
 
 export default function Compare() {
   const initialSliderValues = [30, 25, 15, 20, 10];
