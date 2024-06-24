@@ -6,11 +6,11 @@ import { WeightContext } from "../../weightedgraph/weightcontext";
 export const useScatterData = () => {
   const [scatterData, setScatterData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { stockList, setColorList } = useContext(WeightContext);
+  const { stockList, sliderValues, setColorList } = useContext(WeightContext);
 
   useEffect(() => {
     if (stockList.length > 0) {
-      getClusterData(stockList)
+      getClusterData(stockList, sliderValues)
         .then((data) => {
           setScatterData(data);
           const colorList = data.map((cluster) => ({
