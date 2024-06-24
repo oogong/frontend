@@ -25,12 +25,32 @@ export const ParallelCoordinate = ({ data }) => {
           id: '수익성', value: '수익성',
           ticksPosition: 'before',
           legendPosition: 'start',
-          legendOffset: 30
+          legendOffset: 10
         },
-        { id: '안정성', value: '안정성' },
-        { id: '활동성', value: '활동성' },
-        { id: '생산성', value: '생산성' },
-        { id: '오공지수', value: '오공지수' }
+        {
+          id: '안정성', value: '안정성',
+          ticksPosition: 'before',
+          legendPosition: 'start',
+          legendOffset: 10
+        },
+        {
+          id: '활동성', value: '활동성',
+          ticksPosition: 'before',
+          legendPosition: 'start',
+          legendOffset: 10
+        },
+        {
+          id: '생산성', value: '생산성',
+          ticksPosition: 'before',
+          legendPosition: 'start',
+          legendOffset: 10
+        },
+        {
+          id: '오공지수', value: '오공지수',
+          ticksPosition: 'before',
+          legendPosition: 'start',
+          legendOffset: 10
+        }
       ]}
       groupBy="group"
       margin={{ top: 10, right: 8, bottom: 35, left: 30 }}

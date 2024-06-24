@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BasicTooltip, TableTooltip } from "@nivo/tooltip";
 
 export const CustomTooltip = ({ line }) => {

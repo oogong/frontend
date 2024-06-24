@@ -24,8 +24,12 @@ export default function main() {
             </Col>
             <Col xs={6}>
               <PlotProvider >
-                <Scatter width="100%" height="45vh" />
-                <Parallel height="45vh" />
+                <div className="plot-card">
+                  <Scatter width="100%" height="40vh" />
+                </div>
+                <div className="plot-card">
+                  <Parallel height="45vh" />
+                </div>
               </PlotProvider>
             </Col>
           </WeightProvider>
