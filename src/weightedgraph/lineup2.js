@@ -7,6 +7,8 @@ import { WeightContext } from "./weightcontext";
 import { SortedDataContext } from "./sorteddatacontext";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
+import image2 from "./image.png";
+import "./lineup.css";
 
 const Lineup2 = () => {
   const { sortedData2 } = useContext(SortedDataContext);
@@ -32,8 +34,8 @@ const Lineup2 = () => {
 
           const svg = d3
             .select(svgRef.current)
-            .attr("width", 1000)
-            .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
+            .attr("width", 1200)
+            .attr("height", sortedData.length * 50 + 100); // 데이터 길이에 따라 높이 조정
           if (data && data.length > 0) {
             matchColor().then((d) => {
               console.log("Matched color data:", d); // Log matched color data
@@ -57,8 +59,8 @@ const Lineup2 = () => {
         setData(d);
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 1000)
-          .attr("height", d.length * 50); // 데이터 길이에 따라 높이 조정
+          .attr("width", 1200)
+          .attr("height", d.length * 50 + 100); // 데이터 길이에 따라 높이 조정
         return update(d, svg, ...sliderValues, "group1");
       });
     }
@@ -90,17 +92,6 @@ const Lineup2 = () => {
   };
 
   const rankSort = (sliderValues, data) => {
-    if (!sliderValues || sliderValues.length < 5) {
-      console.error(
-        "sliderValues is undefined or does not have enough elements"
-      );
-      return [];
-    }
-    if (!data || data.length === 0) {
-      console.error("Data is undefined or empty");
-      return [];
-    }
-
     const sortedData = data.sort((a, b) => {
       const colA =
         a.profit * sliderValues[0] +
@@ -178,7 +169,7 @@ const Lineup2 = () => {
     }
 
     const height = 50;
-    const widthScale = 30;
+    const widthScale = 11;
 
     const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
@@ -188,7 +179,7 @@ const Lineup2 = () => {
       .enter()
       .append("g")
       .attr("class", "row")
-      .attr("transform", (d, i) => `translate(0, ${i * height})`)
+      .attr("transform", (d, i) => `translate(0, ${i * height} + 20)`)
       .on("click", (event, d) => {
         navigate(`/${d.id}`); // 추후 router로 페이지 이동 작성
       })
@@ -203,17 +194,18 @@ const Lineup2 = () => {
       .append("rect")
       .attr("class", "background")
       .attr("height", height)
-      .attr("width", 750)
+      .attr("width", 1100)
       .attr("fill", "#ffffff");
 
     rowsEnter
       .append("line")
       .attr("x1", 0)
-      .attr("x2", 750)
+      .attr("x2", 1100)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
       .attr("stroke", "#000000")
-      .attr("stroke-width", 1);
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 0.15); // 투명도 설정
 
     rowsEnter
       .append("text")
@@ -221,28 +213,31 @@ const Lineup2 = () => {
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 1)
+      .attr("font-weight", "bold")
       .text((d, i) => i + 1);
 
-    rowsEnter //군집색상
-      .append("rect")
+    rowsEnter // 군집색상
+      .append("circle")
       .attr("class", "color-type")
-      .attr("y", 10)
-      .attr("height", height - 20)
-      .attr("x", 20)
+      .attr("cx", 55) // x 좌표, rect의 x 속성에서 반지름을 더한 값으로 설정
+      .attr("cy", height / 2) // y 좌표, rect의 y와 height를 이용하여 중앙에 위치하도록 설정
+      .attr("r", (height - 20) / 2) // 반지름, rect의 height를 사용하여 원의 크기 설정
       .attr("fill", (d) => d.color);
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
-      .attr("x", 170)
+      .attr("x", 200)
+      .attr("font-weight", "bold")
       .text((d) => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
-      .attr("x", 70)
+      .attr("x", 100)
+      .attr("font-weight", "bold")
       .text((d) => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
 
     rowsEnter
@@ -291,7 +286,7 @@ const Lineup2 = () => {
       .attr("class", "newarray-text")
       .attr("y", 30)
       .attr("font-size", 15)
-      .attr("x", 800)
+      .attr("x", 1020)
       .text((d, i) => newarray[i]);
 
     const rowsUpdate = rows
@@ -304,8 +299,10 @@ const Lineup2 = () => {
 
     rowsUpdate
       .select(".color-type")
-      .style("width", "30px")
-      .style("fill", (d) => d.color);
+      .attr("cx", 55) // x 좌표
+      .attr("cy", (d) => height / 2) // y 좌표
+      .attr("r", (d) => (height - 20) / 2) // 반지름
+      .attr("fill", (d) => d.color);
 
     rowsUpdate
       .select(".profit-bar")
@@ -351,7 +348,6 @@ const Lineup2 = () => {
           (d.efficiency * weight_m) / widthScale
       )
       .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
-
     if (Array.isArray(newarray) && newarray.length > 0) {
       rowsUpdate.select(".newarray-text").text((d, i) => {
         console.log("Index:", i, "Value:", newarray[i]); // Debugging statement
@@ -365,7 +361,6 @@ const Lineup2 = () => {
       });
     }
   };
-
   return (
     <footer>
       <div className="body_right">

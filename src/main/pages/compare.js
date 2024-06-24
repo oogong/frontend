@@ -7,7 +7,7 @@ import Lineup2 from "../../weightedgraph/lineup2";
 import { Row, Col, Container } from "react-bootstrap";
 import { WeightProvider } from "../../weightedgraph/weightcontext";
 import { SortedDataProvider } from "../../weightedgraph/sorteddatacontext";
-
+import Downbar from "../../weightedgraph/downbar";
 
 export default function Compare() {
   const initialSliderValues = [30, 25, 15, 20, 10];
@@ -26,6 +26,7 @@ export default function Compare() {
                   title="순위"
                   visibleCluster={true}
                 />
+                <Downbar></Downbar>
                 <Lineup />
               </WeightProvider>
             </Col>
@@ -36,6 +37,7 @@ export default function Compare() {
                   title="비교순위"
                   visibleCluster={true}
                 />
+                <Downbar></Downbar>
                 <Lineup2 />
               </WeightProvider>
             </Col>

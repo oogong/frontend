@@ -27,11 +27,13 @@ const Lineup = () => {
         const sortedData = rankSort(sliderValues, weightData);
         setData(sortedData);
         setSortedData(sortedData); // sortedData 설정
+
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 1000)
-          .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
+          .attr("width", 1200)
+          .attr("height", weightData.length * 50 + 50); // 데이터 길이에 따라 높이 조정
         // 군집 색상 바로;
+
         if (data != undefined && data.length > 0) {
           matchColor().then((d) => {
             console.log(d);
@@ -54,8 +56,8 @@ const Lineup = () => {
         setData(d);
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 1000)
-          .attr("height", d.length * 50); // 데이터 길이에 따라 높이 조정
+          .attr("width", 1200)
+          .attr("height", d.length * 50 + 100); // 데이터 길이에 따라 높이 조정
         return update(d, svg, ...sliderValues, "group1");
       });
     }
@@ -149,7 +151,7 @@ const Lineup = () => {
     }
 
     const height = 50;
-    const widthScale = 30;
+    const widthScale = 11;
 
     console.log("원", data);
 
@@ -163,7 +165,7 @@ const Lineup = () => {
       .enter()
       .append("g")
       .attr("class", "row")
-      .attr("transform", (d, i) => `translate(0, ${i * height})`)
+      .attr("transform", (d, i) => `translate(0, ${i * height} + 20)`)
       .on("click", (event, d) => {
         navigate(`/${d.id}`); // 추후 router로 페이지 이동 작성
       })
@@ -178,17 +180,18 @@ const Lineup = () => {
       .append("rect")
       .attr("class", "background")
       .attr("height", height)
-      .attr("width", 750)
+      .attr("width", 1100)
       .attr("fill", "#ffffff");
 
     rowsEnter
       .append("line")
       .attr("x1", 0)
-      .attr("x2", 750)
+      .attr("x2", 1100)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
       .attr("stroke", "#000000")
-      .attr("stroke-width", 1);
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 0.15); // 투명도 설정
 
     rowsEnter
       .append("text")
@@ -196,28 +199,31 @@ const Lineup = () => {
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 1)
+      .attr("font-weight", "bold")
       .text((d, i) => i + 1);
 
-    rowsEnter //군집색상
-      .append("rect")
+    rowsEnter // 군집색상
+      .append("circle")
       .attr("class", "color-type")
-      .attr("y", 10)
-      .attr("height", height - 20)
-      .attr("x", 20)
+      .attr("cx", 55) // x 좌표, rect의 x 속성에서 반지름을 더한 값으로 설정
+      .attr("cy", height / 2) // y 좌표, rect의 y와 height를 이용하여 중앙에 위치하도록 설정
+      .attr("r", (height - 20) / 2) // 반지름, rect의 height를 사용하여 원의 크기 설정
       .attr("fill", (d) => d.color);
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
-      .attr("x", 170)
+      .attr("x", 200)
+      .attr("font-weight", "bold")
       .text((d) => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
-      .attr("x", 70)
+      .attr("x", 100)
+      .attr("font-weight", "bold")
       .text((d) => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
 
     rowsEnter
@@ -270,10 +276,12 @@ const Lineup = () => {
 
     rowsUpdate.select(".index-text").text((d, i) => i + 1);
 
-    rowsUpdate //군집 색상
+    rowsUpdate
       .select(".color-type")
-      .style("width", "30px")
-      .style("fill", (d) => d.color);
+      .attr("cx", 55) // x 좌표
+      .attr("cy", (d) => height / 2) // y 좌표
+      .attr("r", (d) => (height - 20) / 2) // 반지름
+      .attr("fill", (d) => d.color);
 
     rowsUpdate
       .select(".profit-bar")
@@ -322,13 +330,15 @@ const Lineup = () => {
   };
 
   return (
-    <footer>
-      <div className="body_right">
-        <div id="renderer">
-          <svg ref={svgRef}></svg>
+    <div>
+      <footer>
+        <div className="body_right">
+          <div className="renderer">
+            <svg ref={svgRef}></svg>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
   );
 };
 

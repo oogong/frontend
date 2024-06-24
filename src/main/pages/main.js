@@ -7,6 +7,7 @@ import { Row, Col, Container } from "react-bootstrap";
 import { WeightProvider } from "../../weightedgraph/weightcontext";
 import Scatter from "../../clustering/components/scatter";
 import { SortedDataProvider } from "../../weightedgraph/sorteddatacontext";
+import Downbar from "../../weightedgraph/downbar";
 
 export default function main() {
   const initialSliderValues = [30, 25, 15, 20, 10];
@@ -24,6 +25,7 @@ export default function main() {
                   title="순위"
                   visibleCluster={false}
                 />
+                <Downbar />
                 <Lineup />
               </Col>
               <Col xs={6}>
