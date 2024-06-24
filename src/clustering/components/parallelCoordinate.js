@@ -2,34 +2,7 @@ import React, { useRef, useEffect, useCallback } from "react";
 import { ResponsiveParallelCoordinates } from '@nivo/parallel-coordinates'
 import { GroupColors } from "./colorByGroup";
 import useBlinkLine from "../hooks/parallel";
-import { BasicTooltip, Chip, TableTooltip } from "@nivo/tooltip";
-// import { CustomTooltip } from './customTooltip';
-
-const CustomTooltip = ({ line }) => {
-  const { datum, color } = line;
-  const title = "Custom Title";  // 이 부분을 동적으로 설정할 수 있습니다.
-
-  return (
-    <div style={{ padding: '5px', background: 'white', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0,0,0,0.25)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-        <BasicTooltip
-          value={line.datum.data.name}
-          color={line.datum.color}
-          enableChip />
-      </div>
-      <TableTooltip
-        rows={[
-          ['수익성', datum.data.수익성],
-          ['안정성', datum.data.안정성],
-          ['활동성', datum.data.활동성],
-          ['생산성', datum.data.생산성],
-          ['오공지수', datum.data.오공지수],
-        ]}
-      />
-    </div>
-  );
-};
-
+import { CustomTooltip } from "./customTooltip";
 
 export const ParallelCoordinate = ({ data }) => {
   const { hoveredLine, handleMouseEnter, handleMouseLeave } = useBlinkLine();
@@ -48,21 +21,26 @@ export const ParallelCoordinate = ({ data }) => {
     <ResponsiveParallelCoordinates
       data={data}
       variables={[
-        { id: '수익성', value: '수익성' },
+        {
+          id: '수익성', value: '수익성',
+          ticksPosition: 'before',
+          legendPosition: 'start',
+          legendOffset: 30
+        },
         { id: '안정성', value: '안정성' },
         { id: '활동성', value: '활동성' },
         { id: '생산성', value: '생산성' },
         { id: '오공지수', value: '오공지수' }
       ]}
       groupBy="group"
-      margin={{ top: 10, right: 8, bottom: 30, left: 30 }}
+      margin={{ top: 10, right: 8, bottom: 35, left: 30 }}
       curve="monotoneX"
       colors={GroupColors}
       colorBy="group"
-      lineWidth={1}
+      lineWidth={2}
       lineOpacity="0.5"
       pixelRatio={1.25}
-      layers={['axes', 'lines', 'legends']}
+      layers={['lines', 'axes', 'legends']}
       legends={[
         {
           anchor: 'bottom',
