@@ -7,6 +7,8 @@ import { Row, Col, Container } from "react-bootstrap";
 import { WeightProvider } from "../../weightedgraph/weightcontext";
 import Scatter from "../../clustering/components/scatter";
 import { SortedDataProvider } from "../../weightedgraph/sorteddatacontext";
+import { PlotProvider } from "../../clustering/hooks/PlotProvider";
+import Parallel from "../../clustering/components/parallel";
 import Downbar from "../../weightedgraph/downbar";
 
 export default function main() {
@@ -26,10 +28,22 @@ export default function main() {
                   visibleCluster={false}
                 />
                 <Downbar />
+                <CustomGraph
+                  uniqueId="compare1"
+                  title="순위"
+                  visibleCluster={false}
+                />
                 <Lineup />
               </Col>
               <Col xs={6}>
-                <Scatter width="100%" height="50vh" />
+                <PlotProvider>
+                  <div className="plot-card">
+                    <Scatter width="100%" height="40vh" />
+                  </div>
+                  <div className="plot-card">
+                    <Parallel height="45vh" />
+                  </div>
+                </PlotProvider>
               </Col>
             </WeightProvider>
           </SortedDataProvider>
