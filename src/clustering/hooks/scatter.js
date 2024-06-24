@@ -13,6 +13,12 @@ export const useScatterData = () => {
       getClusterData(stockList, sliderValues)
         .then((data) => {
           setScatterData(data);
+          const colorList = data.map((cluster) => ({
+            id: cluster.id,
+            colorId: cluster.data.map((stock) => stock.id),
+          }));
+          setColorList(colorList);
+          console.log("ColorList", colorList);
           setLoading(false);
         })
         .catch((error) => {

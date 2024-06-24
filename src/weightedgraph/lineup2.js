@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import * as d3 from "d3";
+import _ from "lodash";
 import axios from "axios";
-import { WeightContext } from "./weightcontext";
 import "./styles/style.css";
+import { WeightContext } from "./weightcontext";
+import { SortedDataContext } from "./sorteddatacontext";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
-import { SortedDataContext } from "./sorteddatacontext";
 
-const Lineup = () => {
+const Lineup2 = () => {
+  const { sortedData2 } = useContext(SortedDataContext);
   const { sliderValues, setStockList, colorList } = useContext(WeightContext);
-  const svgRef = useRef();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-  const { setSortedData2 } = useContext(SortedDataContext);
-  const [sortedData, setSortedData] = useState([]);
+  const svgRef = useRef();
   const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
 
   useEffect(() => {
@@ -23,21 +23,24 @@ const Lineup = () => {
           `${API_URL.LOCAL}/api/corporates/list`
         );
         const weightData = response.data;
+        console.log("Fetched data:", weightData); // Log fetched data
         setData(weightData);
-        const sortedData = rankSort(sliderValues, weightData);
-        setData(sortedData);
-        setSortedData(sortedData); // sortedData 설정
-        const svg = d3
-          .select(svgRef.current)
-          .attr("width", 1000)
-          .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
-        // 군집 색상 바로;
-        if (data != undefined && data.length > 0) {
-          matchColor().then((d) => {
-            console.log(d);
-            setData(d);
-            update(data, svg, ...sliderValues, "group1");
-          });
+        if (sliderValues && sliderValues.length >= 5) {
+          const sortedData = rankSort(sliderValues, weightData);
+          console.log("Sorted data:", sortedData); // Log sorted data
+          setData(sortedData);
+
+          const svg = d3
+            .select(svgRef.current)
+            .attr("width", 1000)
+            .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
+          if (data && data.length > 0) {
+            matchColor().then((d) => {
+              console.log("Matched color data:", d); // Log matched color data
+              setData(d);
+              update(d, svg, ...sliderValues, "group1");
+            });
+          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -45,10 +48,10 @@ const Lineup = () => {
     };
 
     fetchData();
-  }, []);
+  }, [sliderValues]);
 
   useEffect(() => {
-    if (data != undefined && data.length > 0) {
+    if (data && data.length > 0) {
       matchColor().then((d) => {
         console.log(d);
         setData(d);
@@ -62,7 +65,7 @@ const Lineup = () => {
   }, [colorList]);
 
   useEffect(() => {
-    if (data != undefined && data.length > 0) {
+    if (data && data.length > 0 && sliderValues && sliderValues.length >= 5) {
       L_listen(sliderValues, data);
     }
   }, [sliderValues]);
@@ -86,9 +89,18 @@ const Lineup = () => {
     return data; //
   };
 
-  console.log("삼", data);
-
   const rankSort = (sliderValues, data) => {
+    if (!sliderValues || sliderValues.length < 5) {
+      console.error(
+        "sliderValues is undefined or does not have enough elements"
+      );
+      return [];
+    }
+    if (!data || data.length === 0) {
+      console.error("Data is undefined or empty");
+      return [];
+    }
+
     const sortedData = data.sort((a, b) => {
       const colA =
         a.profit * sliderValues[0] +
@@ -117,19 +129,39 @@ const Lineup = () => {
         ogoong_rate: item.oogong_rate * sliderValues[4],
       }))
     );
-    setSortedData2(sortedData); //sortedData lineup2에 전달
+
+    const newarray = difrank(sortedData, sortedData2);
+    update(
+      sortedData,
+      d3.select(svgRef.current),
+      ...sliderValues,
+      "group1",
+      newarray
+    );
     return sortedData;
+  };
+
+  const difrank = (sortedData, sortedData2) => {
+    const newarray = [];
+    for (let i = 0; i < sortedData.length; i++) {
+      for (let j = 0; j < sortedData2.length; j++) {
+        if (sortedData[i].id === sortedData2[j].id) {
+          newarray.push(j - i);
+        }
+      }
+    }
+    return newarray;
   };
 
   const L_listen = (sliderValues, data) => {
     const svg = d3.select(svgRef.current);
     const sortedData = rankSort(sliderValues, data);
     setData(sortedData);
-    setSortedData(sortedData); // sortedData 설정
-    update(sortedData, svg, ...sliderValues, "group1");
+    const newarray = difrank(sortedData, sortedData2);
+    update(sortedData, svg, ...sliderValues, "group1", newarray);
   };
 
-  const update = async (
+  const update = (
     data,
     svg,
     weight_d,
@@ -137,12 +169,9 @@ const Lineup = () => {
     weight_n,
     weight_m,
     weight_q,
-    groupClass
+    groupClass,
+    newarray
   ) => {
-    if (data === undefined) {
-      return;
-    }
-
     let group = svg.select(`.${groupClass}`);
     if (!group.node()) {
       group = svg.append("g").attr("class", groupClass);
@@ -151,14 +180,10 @@ const Lineup = () => {
     const height = 50;
     const widthScale = 30;
 
-    console.log("원", data);
-
     const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
-    // Exit
     rows.exit().remove();
 
-    // Enter
     const rowsEnter = rows
       .enter()
       .append("g")
@@ -261,7 +286,14 @@ const Lineup = () => {
       .attr("fill", "#C376FF")
       .attr("fill-opacity", 0.7);
 
-    // Update
+    rowsEnter
+      .append("text")
+      .attr("class", "newarray-text")
+      .attr("y", 30)
+      .attr("font-size", 15)
+      .attr("x", 800)
+      .text((d, i) => newarray[i]);
+
     const rowsUpdate = rows
       .merge(rowsEnter)
       .transition()
@@ -270,7 +302,7 @@ const Lineup = () => {
 
     rowsUpdate.select(".index-text").text((d, i) => i + 1);
 
-    rowsUpdate //군집 색상
+    rowsUpdate
       .select(".color-type")
       .style("width", "30px")
       .style("fill", (d) => d.color);
@@ -319,6 +351,19 @@ const Lineup = () => {
           (d.efficiency * weight_m) / widthScale
       )
       .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
+
+    if (Array.isArray(newarray) && newarray.length > 0) {
+      rowsUpdate.select(".newarray-text").text((d, i) => {
+        console.log("Index:", i, "Value:", newarray[i]); // Debugging statement
+        if (newarray[i] > 0) {
+          return `${newarray[i]} 🔺`;
+        } else if (newarray[i] < 0) {
+          return `${newarray[i]} 🔻`;
+        } else {
+          return "0";
+        }
+      });
+    }
   };
 
   return (
@@ -332,4 +377,4 @@ const Lineup = () => {
   );
 };
 
-export default Lineup;
+export default Lineup2;
