@@ -18,18 +18,21 @@ export default function Compare() {
       <NavbarHeader />
       <Container fluid>
         <Row>
-          <Col xs={6}>
-            <WeightProvider initialSliderValues={initialSliderValues} >
-              <CustomGraph uniqueId="compare1" title="순위" visibleCluster={true} />
-              <Lineup />
-            </WeightProvider>
-          </Col>
-          <Col xs={6}>
-            <WeightProvider initialSliderValues={initialSliderValues2}>
-              <CustomGraph uniqueId="compare2" title="비교순위" visibleCluster={true} />
-              <Lineup />
-            </WeightProvider>
-          </Col>
+          <SortedDataProvider>
+            <Col xs={6}>
+              <WeightProvider initialSliderValues={initialSliderValues} >
+                <CustomGraph uniqueId="compare1" title="순위" visibleCluster={true} />
+                <Lineup />
+              </WeightProvider>
+            </Col>
+            <Col xs={6}>
+              <WeightProvider initialSliderValues={initialSliderValues2}>
+                <CustomGraph uniqueId="compare2" title="비교순위" visibleCluster={true} />
+                <Lineup />
+              </WeightProvider>
+            </Col>
+          </SortedDataProvider>
+
         </Row>
       </Container>
     </div>

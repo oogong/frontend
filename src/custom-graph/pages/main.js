@@ -3,6 +3,7 @@ import "./main.css";
 import Scatter from "../../clustering/components/scatter";
 // import "./compare.css";
 import { WeightContext } from "../../weightedgraph/weightcontext";
+import { PlotProvider } from "../../clustering/hooks/PlotProvider";
 
 function CustomGraph({ uniqueId, title, visibleCluster }) {
   const { sliderValues, setSliderValues } = useContext(WeightContext);
@@ -228,7 +229,12 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
             </label>
           </div>
         </div>
-        { visibleCluster && <Scatter /> }
+        {
+          visibleCluster
+          &&
+          <PlotProvider >
+            <Scatter />
+          </PlotProvider>}
       </div>
     </div>
   );
