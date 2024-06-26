@@ -6,6 +6,7 @@ import "./styles/style.css";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
 import { SortedDataContext } from "./sorteddatacontext";
+import { GroupColors } from "../clustering/components/colorByGroup";
 
 const Lineup = () => {
   const { sliderValues, setStockList, colorList } = useContext(WeightContext);
@@ -14,7 +15,7 @@ const Lineup = () => {
   const navigate = useNavigate();
   const { setSortedData2 } = useContext(SortedDataContext);
   const [sortedData, setSortedData] = useState([]);
-  const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +77,7 @@ const Lineup = () => {
         if (colorMatch) {
           return {
             ...item,
-            color: colorSample[colorMatch.id],
+            color: GroupColors[colorMatch.id],
           };
         }
         return item; // 기존 item을 그대로 반환
