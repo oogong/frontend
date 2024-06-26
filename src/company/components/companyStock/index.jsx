@@ -5,6 +5,7 @@ import {
   disconnectSocket,
   requestCurrentPrice,
 } from "../../service/stockPrice";
+import "./index.css";
 
 export default function CompanyStock(props) {
   const [stockCompare, setStockCompare] = useState(0);
@@ -38,6 +39,17 @@ export default function CompanyStock(props) {
       disconnectSocket();
     };
   }, [props.code]);
+
+  useEffect(() => {
+    if (stockCompare < 0) {
+      setCompare(stockCompare * `-1`);
+      setColor("#0029FF");
+    } else {
+      setCompare(stockCompare);
+      setColor("#FF0000");
+    }
+  }, [stockCompare]);
+
   return (
     <div className="company-stock">
       <p className="name">{props.name}</p>
