@@ -234,7 +234,8 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
           &&
           <PlotProvider >
             <Scatter />
-          </PlotProvider>}
+          </PlotProvider>
+        }
       </div>
     </div>
   );
