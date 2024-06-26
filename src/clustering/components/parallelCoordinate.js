@@ -29,11 +29,11 @@ export const ParallelCoordinate = ({ data }) => {
     <ResponsiveParallelCoordinates
       data={data}
       variables={[
-        { id: '수익성', value: '수익성', ticksPosition: 'after', legendPosition: 'start', legendOffset: 30 },
-        { id: '안정성', value: '안정성', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10 },
-        { id: '활동성', value: '활동성', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10 },
-        { id: '생산성', value: '생산성', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10 },
-        { id: '오공지수', value: '오공지수', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10 }
+        { id: '수익성', value: '수익성', ticksPosition: 'after', legendPosition: 'start', legendOffset: 30, min: 0, max: 100 },
+        { id: '안정성', value: '안정성', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10, min: 0, max: 100 },
+        { id: '활동성', value: '활동성', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10, min: 0, max: 100 },
+        { id: '생산성', value: '생산성', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10, min: 0, max: 100 },
+        { id: '오공지수', value: '오공지수', ticksPosition: 'after', legendPosition: 'start', legendOffset: -10, min: 0, max: 100 }
       ]}
       groupBy="group"
       margin={{ top: 5, right: 25, bottom: 0, left: 0 }}
