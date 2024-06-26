@@ -64,3 +64,11 @@ export const requestCurrentPrice = (stockCode, handlePrice, handleCompare) => {
     });
   });
 };
+
+export const disconnectSocket = () => {
+  if (socket) {
+    console.log("Price Disconnecting socket");
+    socket.disconnect();
+    socket = null;
+  }
+};
