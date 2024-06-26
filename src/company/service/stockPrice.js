@@ -40,3 +40,27 @@ export const joinRoom = (roomCode, handlePrice, handleCompare) => {
     });
   });
 };
+
+export const requestCurrentPrice = (stockCode, handlePrice, handleCompare) => {
+  return new Promise((resolve, reject) => {
+    console.log(`Requesting current price for stockCode: ${stockCode}`);
+    socket.emit("request current price", { stockCode });
+
+    socket.on("current price", (response) => {
+      if (response.status === "success") {
+        handlePrice(response.price);
+        handleCompare(response.compare);
+        resolve(response.price);
+      } else {
+        console.log("Price not sent");
+        reject(new Error("price not sent"));
+      }
+    });
+
+    socket.on("error", (error) => {
+      console.error("Error requesting current price:", error);
+      handlePrice(0);
+      handleCompare(0);
+    });
+  });
+};
