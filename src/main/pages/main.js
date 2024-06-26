@@ -10,6 +10,7 @@ import { SortedDataProvider } from "../../weightedgraph/sorteddatacontext";
 import { PlotProvider } from "../../clustering/hooks/PlotProvider";
 import Parallel from "../../clustering/components/parallel";
 import Downbar from "../../weightedgraph/downbar";
+import "./main.css";
 
 export default function main() {
   const initialSliderValues = [30, 25, 15, 20, 10];

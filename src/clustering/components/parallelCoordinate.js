@@ -3,7 +3,7 @@ import { ResponsiveParallelCoordinates } from "@nivo/parallel-coordinates";
 import { GroupColors } from "./colorByGroup";
 import useBlinkLine from "../hooks/parallel";
 import { CustomTooltip } from "./customTooltip";
-import CustomLineHighlight from "./customLineHighlight";
+// import CustomLineHighlight from "./customLineHighlight";
 
 export const ParallelCoordinate = ({ data }) => {
   const [highlightedGroup, setHighlightedGroup] = useState(null);
@@ -12,20 +12,19 @@ export const ParallelCoordinate = ({ data }) => {
     console.log("에 ", data);
   }, [data]);
 
-  const handleLegendClick = (groupIndex) => {
-    if (highlightedGroup === groupIndex) {
-      setHighlightedGroup(null); // 이미 선택된 그룹이면 선택 해제
-    } else {
-      setHighlightedGroup(groupIndex); // 그룹 선택
-    }
+  const handleLegendClick = (legend, event) => {
+    console.log("Legend clicked:", legend);
+    console.log("Event:", event);
+    setHighlightedGroup(legend.id); // 클릭된 범례의 id를 상태에 저장
+    lineOpacity(legend);
   };
 
-  const lineOpacity = (line, groupIndex) => {
-    console.log("line opacity >>> ", GroupColors);
-    if (highlightedGroup !== null && groupIndex !== highlightedGroup) {
-      return 0.5; // 선택된 그룹이 아닌 다른 그룹의 라인은 투명도를 낮춤
+  const lineOpacity = (legend) => {
+    if (legend.id == highlightedGroup) {
+      return 1;
+    } else {
+      return 0.1; // 선택된 그룹이 없는 경우 모든 라인을 진하게 표시
     }
-    return 1; // 선택된 그룹의 라인은 전체 표시
   };
 
   return (
@@ -34,6 +33,7 @@ export const ParallelCoordinate = ({ data }) => {
         data={data}
         variables={[
           {
+            group: 0,
             id: "수익성",
             value: "수익성",
             ticksPosition: "after",
@@ -41,6 +41,7 @@ export const ParallelCoordinate = ({ data }) => {
             legendOffset: 30,
           },
           {
+            group: 1,
             id: "안정성",
             value: "안정성",
             ticksPosition: "after",
@@ -48,6 +49,7 @@ export const ParallelCoordinate = ({ data }) => {
             legendOffset: -10,
           },
           {
+            group: 2,
             id: "활동성",
             value: "활동성",
             ticksPosition: "after",
@@ -55,6 +57,7 @@ export const ParallelCoordinate = ({ data }) => {
             legendOffset: -10,
           },
           {
+            group: 3,
             id: "생산성",
             value: "생산성",
             ticksPosition: "after",
@@ -62,6 +65,7 @@ export const ParallelCoordinate = ({ data }) => {
             legendOffset: -10,
           },
           {
+            group: 4,
             id: "오공지수",
             value: "오공지수",
             ticksPosition: "after",
@@ -75,22 +79,12 @@ export const ParallelCoordinate = ({ data }) => {
         colors={GroupColors}
         colorBy="group"
         lineWidth={3}
-        lineOpacity={(line, groupIndex) => lineOpacity(line, groupIndex)}
+        lineOpacity={(legend) => lineOpacity(legend)}
         pixelRatio={1.25}
         layers={[
           "lines",
           "axes",
           "legends",
-          // { // 커스텀 라인 강조 레이어
-          //   id: 'custom-line-highlight',
-          //   component: (
-          //     <CustomLineHighlight
-          //       data={data.map((d, index) => ({ line: d, color: GroupColors[d.group] }))}
-          //       highlightedLine={highlightedLine}
-          //       onLineHover={handleLineHover}
-          //     />
-          //   ),
-          // },
           "mesh", // 격자
           "annotations", // 주석
         ]}
@@ -106,7 +100,7 @@ export const ParallelCoordinate = ({ data }) => {
             itemTextColor: "#999", // 항목 텍스트 색상 설정
             symbolSize: 12, // 심볼 크기 설정
             symbolShape: "circle", // 심볼 모양 설정
-            onClick: (legend, event) => handleLegendClick(legend.index), // 클릭 이벤트 핸들러
+            onClick: handleLegendClick, // 클릭 이벤트 핸들러
             effects: [
               {
                 on: "hover", // 호버 이펙트
