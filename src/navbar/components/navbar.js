@@ -54,7 +54,8 @@ function NavbarHeader() {
                 className="me-2"
                 aria-label="Search"
                 value={keyword}
-                onChange={handleKeyword}></Form.Control>
+                onChange={handleKeyword}
+              ></Form.Control>
               {showIncludedResults && includedResults.length > 0 && (
                 <div className="includedSearchForm">
                   {includedResults.map((result, index) => (
@@ -63,7 +64,8 @@ function NavbarHeader() {
                       className="included-result"
                       onClick={() => {
                         handleIncludedResultClick(result);
-                      }}>
+                      }}
+                    >
                       {result}
                     </a>
                   ))}
@@ -74,7 +76,8 @@ function NavbarHeader() {
             <Button
               variant="outline-light"
               type="submit"
-              className="search-button">
+              className="search-button"
+            >
               <img src="/search-icon.svg" alt="Search" width="20" />
             </Button>
           </Form>

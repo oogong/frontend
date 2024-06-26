@@ -10,16 +10,16 @@ export const PlotProvider = ({ children }) => {
   useEffect(() => {
     if (loading === false && scatterData) {
       const tmpPlotData = [];
-
+      console.log("스캐터", scatterData);
       scatterData.forEach((items, index) => {
-        items.data.forEach(item => {
+        items.data.forEach((item) => {
           tmpPlotData.push({ ...item, group: index });
-        })
+        });
       });
 
       setParallelData(tmpPlotData);
     }
-  }, [scatterData])
+  }, [scatterData]);
 
   return (
     <PlotContext.Provider value={{ scatterData, loading, parallelData }}>

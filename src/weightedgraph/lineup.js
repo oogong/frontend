@@ -151,7 +151,7 @@ const Lineup = () => {
     }
 
     const height = 50;
-    const widthScale = 11;
+    const widthScale = 30;
 
     console.log("원", data);
 
@@ -180,13 +180,13 @@ const Lineup = () => {
       .append("rect")
       .attr("class", "background")
       .attr("height", height)
-      .attr("width", 1100)
+      .attr("width", 700)
       .attr("fill", "#ffffff");
 
     rowsEnter
       .append("line")
       .attr("x1", 0)
-      .attr("x2", 1100)
+      .attr("x2", 700)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
       .attr("stroke", "#000000")

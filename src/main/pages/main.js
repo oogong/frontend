@@ -28,19 +28,14 @@ export default function main() {
                   visibleCluster={false}
                 />
                 <Downbar />
-                <CustomGraph
-                  uniqueId="compare1"
-                  title="순위"
-                  visibleCluster={false}
-                />
                 <Lineup />
               </Col>
               <Col xs={6}>
                 <PlotProvider>
-                  <div className="plot-card">
+                  <div className="plot-card1">
                     <Scatter width="100%" height="40vh" />
                   </div>
-                  <div className="plot-card">
+                  <div className="plot-card2">
                     <Parallel height="45vh" />
                   </div>
                 </PlotProvider>

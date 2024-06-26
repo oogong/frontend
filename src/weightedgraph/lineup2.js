@@ -169,7 +169,7 @@ const Lineup2 = () => {
     }
 
     const height = 50;
-    const widthScale = 11;
+    const widthScale = 30;
 
     const rows = group.selectAll("g.row").data(data, (d) => d.name);
 
@@ -194,13 +194,13 @@ const Lineup2 = () => {
       .append("rect")
       .attr("class", "background")
       .attr("height", height)
-      .attr("width", 1100)
+      .attr("width", 800)
       .attr("fill", "#ffffff");
 
     rowsEnter
       .append("line")
       .attr("x1", 0)
-      .attr("x2", 1100)
+      .attr("x2", 800)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
       .attr("stroke", "#000000")
@@ -286,7 +286,8 @@ const Lineup2 = () => {
       .attr("class", "newarray-text")
       .attr("y", 30)
       .attr("font-size", 15)
-      .attr("x", 1020)
+      .attr("x", 620)
+      .attr("font-weight", "bold")
       .text((d, i) => newarray[i]);
 
     const rowsUpdate = rows
@@ -348,15 +349,49 @@ const Lineup2 = () => {
           (d.efficiency * weight_m) / widthScale
       )
       .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
+
     if (Array.isArray(newarray) && newarray.length > 0) {
-      rowsUpdate.select(".newarray-text").text((d, i) => {
+      rowsUpdate.select(".newarray-text").each(function (d, i) {
+        const value = newarray[i];
+        const absValue = Math.abs(value);
         console.log("Index:", i, "Value:", newarray[i]); // Debugging statement
+
+        // 기존 텍스트 요소를 초기화
+        d3.select(this).text("");
+
+        // 기존의 svg 요소를 초기화
+        d3.select(this.parentNode).selectAll("svg").remove();
+
+        const textElement = d3.select(this);
+
+        textElement.append("tspan").text(absValue);
+
         if (newarray[i] > 0) {
-          return `${newarray[i]} 🔺`;
+          const svg = d3
+            .select(this.parentNode)
+            .append("svg")
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("x", +d3.select(this).attr("x") + 20)
+            .attr("y", +d3.select(this).attr("y") - 15); // 위치를 텍스트 옆으로 조정
+
+          svg
+            .append("polygon")
+            .attr("points", "10,0 0,20 20,20")
+            .attr("fill", "red");
         } else if (newarray[i] < 0) {
-          return `${newarray[i]} 🔻`;
-        } else {
-          return "0";
+          const svg = d3
+            .select(this.parentNode)
+            .append("svg")
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("x", +d3.select(this).attr("x") + 20)
+            .attr("y", +d3.select(this).attr("y") - 15); // 위치를 텍스트 옆으로 조정
+
+          svg
+            .append("polygon")
+            .attr("points", "0,0 20,0 10,20")
+            .attr("fill", "blue");
         }
       });
     }
