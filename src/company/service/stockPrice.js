@@ -17,3 +17,26 @@ export const connectSocket = () => {
   return socket;
 };
 
+export const joinRoom = (roomCode, handlePrice, handleCompare) => {
+  return new Promise((resolve, reject) => {
+    console.log(`Joining price room with roomCode: ${roomCode}`);
+    socket.emit("join price room", { roomCode });
+
+    socket.on("load price", (price) => {
+      if (!price) {
+        handlePrice(0);
+        handleCompare(0);
+      } else {
+        handlePrice(price.price);
+        handleCompare(price.compare);
+        console.log("load price", price.price);
+      }
+      resolve(price);
+    });
+
+    socket.on("error", (error) => {
+      console.error("Error joining price room:", error);
+      reject(error);
+    });
+  });
+};
