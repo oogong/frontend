@@ -12,7 +12,7 @@ import {
 
 export default function Matrix({ ratio, color }) {
   return (
-    <ResponsiveContainer width="100%" height={180}>
+    <ResponsiveContainer width="100%" height={270}>
       <BarChart
         data={ratio}
         margin={{
