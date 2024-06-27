@@ -7,6 +7,8 @@ import { WeightContext } from "./weightcontext";
 import { SortedDataContext } from "./sorteddatacontext";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
+import "./lineup.css";
+import { GroupColors } from "../clustering/components/colorByGroup";
 
 const Lineup2 = () => {
   const { sortedData2 } = useContext(SortedDataContext);
@@ -32,8 +34,8 @@ const Lineup2 = () => {
 
           const svg = d3
             .select(svgRef.current)
-            .attr("width", 1000)
-            .attr("height", weightData.length * 50); // 데이터 길이에 따라 높이 조정
+            .attr("width", 700)
+            .attr("height", sortedData.length * 50 + 100); // 데이터 길이에 따라 높이 조정
           if (data && data.length > 0) {
             matchColor().then((d) => {
               console.log("Matched color data:", d); // Log matched color data
@@ -57,8 +59,8 @@ const Lineup2 = () => {
         setData(d);
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 1000)
-          .attr("height", d.length * 50); // 데이터 길이에 따라 높이 조정
+          .attr("width", 700)
+          .attr("height", d.length * 50 + 100); // 데이터 길이에 따라 높이 조정
         return update(d, svg, ...sliderValues, "group1");
       });
     }
@@ -79,7 +81,7 @@ const Lineup2 = () => {
         if (colorMatch) {
           return {
             ...item,
-            color: colorSample[colorMatch.id],
+            color: GroupColors[colorMatch.id],
           };
         }
         return item; // 기존 item을 그대로 반환
@@ -90,28 +92,17 @@ const Lineup2 = () => {
   };
 
   const rankSort = (sliderValues, data) => {
-    if (!sliderValues || sliderValues.length < 5) {
-      console.error(
-        "sliderValues is undefined or does not have enough elements"
-      );
-      return [];
-    }
-    if (!data || data.length === 0) {
-      console.error("Data is undefined or empty");
-      return [];
-    }
-
     const sortedData = data.sort((a, b) => {
       const colA =
         a.profit * sliderValues[0] +
-        a.growth * sliderValues[1] +
-        a.safety * sliderValues[2] +
+        a.safety * sliderValues[1] +
+        a.growth * sliderValues[2] +
         a.efficiency * sliderValues[3] +
         a.oogong_rate * sliderValues[4];
       const colB =
         b.profit * sliderValues[0] +
-        b.growth * sliderValues[1] +
-        b.safety * sliderValues[2] +
+        b.safety * sliderValues[1] +
+        b.growth * sliderValues[2] +
         b.efficiency * sliderValues[3] +
         b.oogong_rate * sliderValues[4];
 
@@ -123,9 +114,9 @@ const Lineup2 = () => {
         id: item.id,
         name: item.name,
         profitability: item.profit * sliderValues[0],
-        stability: item.safety * sliderValues[2],
+        stability: item.safety * sliderValues[1],
+        potential: item.growth * sliderValues[2],
         activity: item.efficiency * sliderValues[3],
-        potential: item.growth * sliderValues[1],
         ogoong_rate: item.oogong_rate * sliderValues[4],
       }))
     );
@@ -188,7 +179,7 @@ const Lineup2 = () => {
       .enter()
       .append("g")
       .attr("class", "row")
-      .attr("transform", (d, i) => `translate(0, ${i * height})`)
+      .attr("transform", (d, i) => `translate(0, ${i * height} + 20)`)
       .on("click", (event, d) => {
         navigate(`/${d.id}`); // 추후 router로 페이지 이동 작성
       })
@@ -203,17 +194,18 @@ const Lineup2 = () => {
       .append("rect")
       .attr("class", "background")
       .attr("height", height)
-      .attr("width", 750)
+      .attr("width", 800)
       .attr("fill", "#ffffff");
 
     rowsEnter
       .append("line")
       .attr("x1", 0)
-      .attr("x2", 750)
+      .attr("x2", 800)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
       .attr("stroke", "#000000")
-      .attr("stroke-width", 1);
+      .attr("stroke-width", 1)
+      .attr("stroke-opacity", 0.15); // 투명도 설정
 
     rowsEnter
       .append("text")
@@ -221,28 +213,31 @@ const Lineup2 = () => {
       .attr("y", 30)
       .attr("font-size", 13)
       .attr("x", 1)
+      .attr("font-weight", "bold")
       .text((d, i) => i + 1);
 
-    rowsEnter //군집색상
-      .append("rect")
+    rowsEnter // 군집색상
+      .append("circle")
       .attr("class", "color-type")
-      .attr("y", 10)
-      .attr("height", height - 20)
-      .attr("x", 20)
+      .attr("cx", 55) // x 좌표, rect의 x 속성에서 반지름을 더한 값으로 설정
+      .attr("cy", height / 2) // y 좌표, rect의 y와 height를 이용하여 중앙에 위치하도록 설정
+      .attr("r", (height - 20) / 2) // 반지름, rect의 height를 사용하여 원의 크기 설정
       .attr("fill", (d) => d.color);
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
-      .attr("x", 170)
+      .attr("x", 200)
+      .attr("font-weight", "bold")
       .text((d) => (d.name.length > 10 ? `${d.name.slice(0, 10)}...` : d.name));
 
     rowsEnter
       .append("text")
       .attr("y", 30)
       .attr("font-size", 13)
-      .attr("x", 70)
+      .attr("x", 100)
+      .attr("font-weight", "bold")
       .text((d) => (d.id.length > 10 ? `${d.id.slice(0, 10)}...` : d.id));
 
     rowsEnter
@@ -256,7 +251,7 @@ const Lineup2 = () => {
 
     rowsEnter
       .append("rect")
-      .attr("class", "growth-bar")
+      .attr("class", "safety-bar")
       .attr("y", 10)
       .attr("height", height - 20)
       .attr("fill", "#FFDD87")
@@ -264,7 +259,7 @@ const Lineup2 = () => {
 
     rowsEnter
       .append("rect")
-      .attr("class", "safety-bar")
+      .attr("class", "growth-bar")
       .attr("y", 10)
       .attr("height", height - 20)
       .attr("fill", "#91D600")
@@ -291,7 +286,8 @@ const Lineup2 = () => {
       .attr("class", "newarray-text")
       .attr("y", 30)
       .attr("font-size", 15)
-      .attr("x", 800)
+      .attr("x", 620)
+      .attr("font-weight", "bold")
       .text((d, i) => newarray[i]);
 
     const rowsUpdate = rows
@@ -304,28 +300,30 @@ const Lineup2 = () => {
 
     rowsUpdate
       .select(".color-type")
-      .style("width", "30px")
-      .style("fill", (d) => d.color);
+      .attr("cx", 55) // x 좌표
+      .attr("cy", (d) => height / 2) // y 좌표
+      .attr("r", (d) => (height - 20) / 2) // 반지름
+      .attr("fill", (d) => d.color);
 
     rowsUpdate
       .select(".profit-bar")
       .style("width", (d) => (d.profit * weight_d) / widthScale + "px");
 
     rowsUpdate
-      .select(".growth-bar")
+      .select(".safety-bar")
       .attr("x", (d) => 350 + (d.profit * weight_d) / widthScale)
-      .style("width", (d) => (d.growth * weight_s) / widthScale + "px");
+      .style("width", (d) => (d.safety * weight_s) / widthScale + "px");
 
     rowsUpdate
-      .select(".safety-bar")
+      .select(".growth-bar")
       .attr(
         "x",
         (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
-          (d.growth * weight_s) / widthScale
+          (d.safety * weight_s) / widthScale
       )
-      .style("width", (d) => (d.safety * weight_n) / widthScale + "px");
+      .style("width", (d) => (d.growth * weight_n) / widthScale + "px");
 
     rowsUpdate
       .select(".efficiency-bar")
@@ -334,8 +332,8 @@ const Lineup2 = () => {
         (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
-          (d.growth * weight_s) / widthScale +
-          (d.safety * weight_n) / widthScale
+          (d.safety * weight_s) / widthScale +
+          (d.growth * weight_n) / widthScale
       )
       .style("width", (d) => (d.efficiency * weight_m) / widthScale + "px");
 
@@ -346,26 +344,58 @@ const Lineup2 = () => {
         (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
-          (d.growth * weight_s) / widthScale +
-          (d.safety * weight_n) / widthScale +
+          (d.safety * weight_s) / widthScale +
+          (d.growth * weight_n) / widthScale +
           (d.efficiency * weight_m) / widthScale
       )
       .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
 
     if (Array.isArray(newarray) && newarray.length > 0) {
-      rowsUpdate.select(".newarray-text").text((d, i) => {
+      rowsUpdate.select(".newarray-text").each(function (d, i) {
+        const value = newarray[i];
+        const absValue = Math.abs(value);
         console.log("Index:", i, "Value:", newarray[i]); // Debugging statement
+
+        // 기존 텍스트 요소를 초기화
+        d3.select(this).text("");
+
+        // 기존의 svg 요소를 초기화
+        d3.select(this.parentNode).selectAll("svg").remove();
+
+        const textElement = d3.select(this);
+
+        textElement.append("tspan").text(absValue);
+
         if (newarray[i] > 0) {
-          return `${newarray[i]} 🔺`;
+          const svg = d3
+            .select(this.parentNode)
+            .append("svg")
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("x", +d3.select(this).attr("x") + 20)
+            .attr("y", +d3.select(this).attr("y") - 15); // 위치를 텍스트 옆으로 조정
+
+          svg
+            .append("polygon")
+            .attr("points", "10,0 0,20 20,20")
+            .attr("fill", "red");
         } else if (newarray[i] < 0) {
-          return `${newarray[i]} 🔻`;
-        } else {
-          return "0";
+          const svg = d3
+            .select(this.parentNode)
+            .append("svg")
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("x", +d3.select(this).attr("x") + 20)
+            .attr("y", +d3.select(this).attr("y") - 15); // 위치를 텍스트 옆으로 조정
+
+          svg
+            .append("polygon")
+            .attr("points", "0,0 20,0 10,20")
+            .attr("fill", "blue");
         }
       });
     }
   };
-
   return (
     <footer>
       <div className="body_right">

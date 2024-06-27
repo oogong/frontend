@@ -4,18 +4,22 @@ import { BasicTooltip } from "@nivo/tooltip";
 import { useBlinkNode } from "../hooks/scatter";
 import { PlotContext } from "../hooks/PlotProvider";
 import { GroupColors } from "./colorByGroup";
+import "./scatter.css";
 
 export default function Scatter(props) {
   const { scatterData, loading } = useContext(PlotContext);
   const { setHoveredNode, RenderingNode } = useBlinkNode();
   const colorList = GroupColors;
-
+  console.log("프롭", props);
   if (loading) {
     return <p>Loading...</p>;
   }
 
   return (
-    <div id="scatter-plot-container" style={{ width: `${props.width}`, height: `${props.height}` }}>
+    <div
+      id="scatter-plot-container"
+      style={{ width: `${props.width}`, height: `${props.height}` }}
+    >
       <ResponsiveScatterPlot
         data={scatterData}
         margin={{ top: 30, right: 10, bottom: 30, left: 10 }}
