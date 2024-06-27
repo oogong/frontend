@@ -49,5 +49,5 @@ jobs:
             nvm use 22.0.0
             node -v
             npm -v
-            npm i --package-lock-only
+            npm i --force
             npm run build
