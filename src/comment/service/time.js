@@ -23,17 +23,17 @@ const isNewDay = (currentMessageDate, previousMessageDate) => {
 
 const getLastActiveTime = (lastActive) => {
   if (!lastActive) {
-    return "Not yet active"; // 아직 활성화되지 않았을 때의 메시지
+    return "아직 채팅 기록이 없어요!"; // 아직 활성화되지 않았을 때의 메시지
   }
 
   const now = new Date();
   const minutesAgo = Math.floor((now - lastActive) / (1000 * 60));
 
   if (minutesAgo === 0) {
-    return "Active now";
+    return "방금 메세지가 올라왔어요!";
   }
 
-  return `Active ${minutesAgo} mins ago`;
+  return `${minutesAgo}분 전에 메세지가 올라왔어요!`;
 };
 
 export { convertToLocalTime, isNewDay, extractDatePart, getLastActiveTime };
