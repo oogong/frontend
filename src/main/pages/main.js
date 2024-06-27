@@ -29,7 +29,9 @@ export default function main() {
                   visibleCluster={false}
                 />
                 <Downbar />
-                <Lineup />
+                <div style={{ overflowY: "auto", maxHeight: "50vh" }}>
+                  <Lineup />
+                </div>
               </Col>
               <Col xs={6}>
                 <PlotProvider>
