@@ -30,7 +30,7 @@ const Lineup = () => {
 
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 700)
+          .attr("width", 750)
           .attr("height", weightData.length * 50 + 50); // 데이터 길이에 따라 높이 조정
         // 군집 색상 바로;
 
@@ -56,7 +56,7 @@ const Lineup = () => {
         setData(d);
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 700)
+          .attr("width", 750)
           .attr("height", d.length * 50 + 100); // 데이터 길이에 따라 높이 조정
         return update(d, svg, ...sliderValues, "group1");
       });
@@ -180,13 +180,13 @@ const Lineup = () => {
       .append("rect")
       .attr("class", "background")
       .attr("height", height)
-      .attr("width", 700)
+      .attr("width", 800)
       .attr("fill", "#ffffff");
 
     rowsEnter
       .append("line")
       .attr("x1", 0)
-      .attr("x2", 700)
+      .attr("x2", 800)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
       .attr("stroke", "#000000")

@@ -37,7 +37,7 @@ const Comment = ({ roomCode, roomName, setOgongRate }) => {
   const [lastActive, setLastActive] = useState(null); // 마지막 활성화 시간을 저장하는 상태
   // const [ogongRate, setOgongRate] = useState(null);
 
-  const handleMessages = loadedMessages => {
+  const handleMessages = (loadedMessages) => {
     setMessages(loadedMessages);
     // 로드된 메시지가 있으면 가장 최근 메시지의 시간으로 lastActive를 갱신
     if (loadedMessages.length > 0) {
@@ -62,7 +62,7 @@ const Comment = ({ roomCode, roomName, setOgongRate }) => {
     connectSocket();
     // 방에 참가
     joinRoom(roomCode, roomName, handleMessages)
-      .then(messages => {
+      .then((messages) => {
         console.log("Messages loaded:", messages);
         if (messages.length > 0) {
           const lastMessageTime = new Date(
@@ -71,7 +71,7 @@ const Comment = ({ roomCode, roomName, setOgongRate }) => {
           setLastActive(lastMessageTime); // 방에 메시지가 있으면 활성화 시간 갱신
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error joining room:", error);
       });
 
@@ -91,13 +91,13 @@ const Comment = ({ roomCode, roomName, setOgongRate }) => {
     setUserId(storedUserId);
   }, []);
 
-  const handleSend = messageText => {
+  const handleSend = (messageText) => {
     if (messageText) {
       sendMessage(roomCode, userId, messageText)
-        .then(response => {
+        .then((response) => {
           console.log("Message sent:", response);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error sending message:", error);
         });
     }
@@ -130,7 +130,8 @@ const Comment = ({ roomCode, roomName, setOgongRate }) => {
                     sender: msg.senderId,
                     direction: getMessageDirection(msg.senderId, userId),
                     position: "single",
-                  }}>
+                  }}
+                >
                   <Avatar
                     size="md"
                     src={require(`../comment_assets/userImages/userLogo${getAnimalImageFromUUID(
@@ -148,7 +149,7 @@ const Comment = ({ roomCode, roomName, setOgongRate }) => {
               </React.Fragment>
             ))}
           </MessageList>
-          <MessageInput placeholder="Type message here" onSend={handleSend} />
+          <MessageInput placeholder="메세지를 입력하세요" onSend={handleSend} />
         </ChatContainer>
       </MainContainer>
     </div>

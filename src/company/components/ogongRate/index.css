@@ -1,13 +1,18 @@
+.ogong-info {
+  margin-bottom: 10px;
+}
+
 .ogong-header {
   display: flex;
-  align-items: center;
-  gap: 7px;
+  flex-direction: column;
+  align-items: left;
   margin-bottom: 40px;
 }
 
 .ogong-header h3 {
   font-size: 18px;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .ogong-header .ogong-description {
@@ -21,21 +26,21 @@
   color: #474747;
 }
 
-.ogong-bar {
+.ogong-bar-container {
+  position: relative; /* Ensure the container is the reference for absolute positioning */
   padding-bottom: 35px;
 }
 
-.ogong-bar-chart {
-  /* position: relative; */
+.ogong-bar {
   background: linear-gradient(to right, #ff0000, #8000ff);
   width: 100%;
   height: 16px;
-  z-index: 1;
+  position: relative; /* Ensure the bar is the reference for the rate indicator */
 }
 
-.ogong-bar-tag {
-  display: flex;
-  justify-content: space-between;
+.ogong-bar-chart {
+  width: 100%;
+  height: 16px;
 }
 
 .ogong-lines {
@@ -56,9 +61,10 @@
 .ogong-rate {
   display: flex;
   flex-direction: column;
+  align-items: center;
   position: absolute;
   bottom: 22px;
-  z-index: 1;
+  transform: translateX(-50%); /* Center the rate indicator */
 }
 
 .ogong-rate p {
