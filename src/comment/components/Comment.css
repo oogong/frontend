@@ -4,35 +4,59 @@
 
 .cs-message-separator::before,
 .cs-message-separator::after {
-  background-color: gray; /* 구분선 색상 변경 */
+  background-color: rgba(0, 0, 0, 0.1); /* 구분선 색상 변경 */
 }
 
 .cs-conversation-header {
-  background-color: lightgray;
+  background-color: #f6f6f6;
 }
 
 .cs-conversation-header__content .cs-conversation-header__user-name {
-  background-color: lightgray;
+  background-color: #f6f6f6;
 }
 
 .cs-conversation-header__content .cs-conversation-header__info {
-  background-color: lightgray;
+  background-color: #f6f6f6;
+}
+
+.cs-conversation-header__content .cs-conversation-header__info {
+  font-size: 13px;
+}
+
+.cs-message {
+  overflow: visible;
 }
 
 .cs-message--incoming .cs-message__content {
-  background-color: lightgray;
+  background-color: #f6f6f6;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .cs-message--outgoing .cs-message__content {
-  background-color: rgba(128, 128, 128, 0.537);
+  background-color: #f6f6f6;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.cs-message.cs-message--incoming.cs-message--single:not(:first-child) {
+  margin-top: 10px;
+}
+
+.cs-message.cs-message--outgoing.cs-message--single:not(:first-child) {
+  margin-top: 10px;
+}
+
+.cs-message__footer {
+  margin: 4px 0 2px 0;
+  font-size: 12px;
 }
 
 .cs-message-input__content-editor-wrapper {
-  background-color: lightgray;
+  background-color: #f6f6f6;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 .cs-message-input__content-editor {
-  background-color: lightgray;
+  background-color: #f6f6f6;
 }
 
 .cs-button--attachment {

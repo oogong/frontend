@@ -1,3 +1,7 @@
 p.indicator {
   font-weight: 600;
 }
+
+.indicator-box {
+  padding: 20px;
+}
