@@ -26,11 +26,11 @@ export default function Company({ ratios, updateOgongRate }) {
             </Col>
             <Col className="indicator-box" xs={12} md={6}>
               <p className="indicator">{indicatorName[1]} 지표</p>
-              <Matrix ratio={ratios.growth} color={rateColor[1]} />
+              <Matrix ratio={ratios.stability} color={rateColor[1]} />
             </Col>
             <Col className="indicator-box" xs={12} md={6}>
               <p className="indicator">{indicatorName[2]} 지표</p>
-              <Matrix ratio={ratios.stability} color={rateColor[2]} />
+              <Matrix ratio={ratios.growth} color={rateColor[2]} />
             </Col>
             <Col className="indicator-box" xs={12} md={6}>
               <p className="indicator">{indicatorName[3]} 지표</p>
