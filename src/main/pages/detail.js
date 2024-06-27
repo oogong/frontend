@@ -13,9 +13,8 @@ export default function Detail() {
 
   useEffect(() => {
     if (params.code) {
-      getStockRatios(params.code).then(data => {
-        console.log(data);
-        setRatios(data); // 삼성전자 CODE 00126380
+      getStockRatios(params.code).then((data) => {
+        setRatios(data);
       });
     }
   }, [params.code]);
@@ -25,14 +24,14 @@ export default function Detail() {
   }
 
   return (
-    <div style={{height:"100%"}}>
+    <div style={{ height: "100%" }}>
       <NavbarHeader />
-      <Container fluid style={{padding:"0px"}}>
-        <Row style={{alignItems: "flex-start"}}>
-          <Col xs={8} sm={8} style={{padding:"0px"}}>
+      <Container fluid style={{ padding: "0px" }}>
+        <Row style={{ alignItems: "flex-start" }}>
+          <Col xs={8} sm={8} style={{ padding: "0px" }}>
             <Company ratios={ratios} />
           </Col>
-          <Col xs={4} sm={4} style={{padding:"0px"}}>
+          <Col xs={4} sm={4} style={{ padding: "0px" }}>
             <Comment roomCode={params.code} roomName={ratios.name} />
           </Col>
         </Row>

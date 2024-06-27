@@ -34,7 +34,7 @@ export default function OgongRate(props) {
   console.log("textColor: " + textColor);
 
   return (
-    <div style={{flex:1}}>
+    <div className="ogong-info" style={{ flex: 1 }}>
       <div className="ogong-header">
         <h3>오공지수</h3>
         <div className="ogong-description">
@@ -47,7 +47,7 @@ export default function OgongRate(props) {
         <p></p>
       </div>
 
-      <div style={{position:"relative"}}>
+      <div className="ogong-bar-container">
         <div className="ogong-bar">
           <div className="ogong-bar-chart" />
           <div className="ogong-lines">
@@ -65,8 +65,7 @@ export default function OgongRate(props) {
         <div className="ogong-rate" style={{ left: sliderPosition }}>
           <p style={{ color: textColor }}>{rate}%</p>
           <img src="ogong.svg" alt="ogong" />
-        </div >
-
+        </div>
       </div>
     </div>
   );
