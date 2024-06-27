@@ -18,6 +18,10 @@ function rgbToHex(r, g, b) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
+// export function setNewOgongRate(newOgong) {
+
+// }
+
 export default function OgongRate(props) {
   const rate = Number(props.rate).toFixed(1);
   const sliderPosition = `${rate}%`;
@@ -34,7 +38,7 @@ export default function OgongRate(props) {
   console.log("textColor: " + textColor);
 
   return (
-    <div style={{flex:1}}>
+    <div style={{ flex: 1 }}>
       <div className="ogong-header">
         <h3>오공지수</h3>
         <div className="ogong-description">
@@ -47,7 +51,7 @@ export default function OgongRate(props) {
         <p></p>
       </div>
 
-      <div style={{position:"relative"}}>
+      <div style={{ position: "relative" }}>
         <div className="ogong-bar">
           <div className="ogong-bar-chart" />
           <div className="ogong-lines">

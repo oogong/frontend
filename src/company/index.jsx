@@ -6,7 +6,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import Matrix from './components/metrics';
 import './components/styles/company.css';
 
-export default function Company({ ratios }) {
+export default function Company({ ratios, updateOgongRate }) {
   const indicatorName = ['수익성', '안정성', '성장성', '활동성'];
   const rateColor = ['#ff7300', '#ffc658', '#82ca9d', '#8884d8'];
 
@@ -17,7 +17,7 @@ export default function Company({ ratios }) {
         <Container fluid style={{ padding: "30px 30px 0px 30px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <CompanyStock code={ratios.code} name={ratios.name} price={ratios.price} />
-            <OgongRate rate={ratios.ogong_rate} />
+            <OgongRate rate={updateOgongRate} />
           </div>
           <Row>
             <Col xs={12} md={6}>
