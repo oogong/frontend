@@ -34,7 +34,7 @@ const Lineup2 = () => {
 
           const svg = d3
             .select(svgRef.current)
-            .attr("width", 700)
+            .attr("width", 800)
             .attr("height", sortedData.length * 50 + 100); // 데이터 길이에 따라 높이 조정
           if (data && data.length > 0) {
             matchColor().then((d) => {
@@ -59,7 +59,7 @@ const Lineup2 = () => {
         setData(d);
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 700)
+          .attr("width", 800)
           .attr("height", d.length * 50 + 100); // 데이터 길이에 따라 높이 조정
         return update(d, svg, ...sliderValues, "group1");
       });
@@ -200,7 +200,7 @@ const Lineup2 = () => {
     rowsEnter
       .append("line")
       .attr("x1", 0)
-      .attr("x2", 800)
+      .attr("x2", 900)
       .attr("y1", height - 1)
       .attr("y2", height - 1)
       .attr("stroke", "#000000")
@@ -364,34 +364,46 @@ const Lineup2 = () => {
 
         const textElement = d3.select(this);
 
-        textElement.append("tspan").text(absValue);
-
         if (newarray[i] > 0) {
           const svg = d3
             .select(this.parentNode)
             .append("svg")
             .attr("width", 20)
             .attr("height", 20)
-            .attr("x", +d3.select(this).attr("x") + 20)
+            .attr("x", +d3.select(this).attr("x") - 15)
             .attr("y", +d3.select(this).attr("y") - 15); // 위치를 텍스트 옆으로 조정
 
           svg
             .append("polygon")
             .attr("points", "10,0 0,20 20,20")
             .attr("fill", "red");
+
+          textElement
+            .append("tspan")
+            .text(absValue)
+            .attr("fill", "red")
+            .attr("x", +d3.select(this).attr("x") + 25); // 텍스트 위치를 조정
         } else if (newarray[i] < 0) {
           const svg = d3
             .select(this.parentNode)
             .append("svg")
             .attr("width", 20)
             .attr("height", 20)
-            .attr("x", +d3.select(this).attr("x") + 20)
+            .attr("x", +d3.select(this).attr("x") - 15)
             .attr("y", +d3.select(this).attr("y") - 15); // 위치를 텍스트 옆으로 조정
 
           svg
             .append("polygon")
             .attr("points", "0,0 20,0 10,20")
             .attr("fill", "blue");
+
+          textElement
+            .append("tspan")
+            .text(absValue)
+            .attr("fill", "blue")
+            .attr("x", +d3.select(this).attr("x") + 25); // 텍스트 위치를 조정
+        } else {
+          textElement.append("tspan").text(absValue).attr("fill", "black");
         }
       });
     }
@@ -400,7 +412,7 @@ const Lineup2 = () => {
     <footer>
       <div className="body_right">
         <div id="renderer">
-          <svg ref={svgRef}></svg>
+          <svg ref={svgRef} style={{ marginLeft: "0px" }}></svg>
         </div>
       </div>
     </footer>
