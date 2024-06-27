@@ -38,6 +38,7 @@ jobs:
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
             cd /home/ubuntu/Client-V2/frontend
+            git reset --hard HEAD
             git fetch origin main
             git reset --hard origin/main
             # Install NVM and Node.js on the remote server
@@ -48,5 +49,5 @@ jobs:
             nvm use 22.0.0
             node -v
             npm -v
-            npm i --force
+            npm i --package-lock-only
             npm run build
