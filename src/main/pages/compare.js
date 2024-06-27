@@ -43,7 +43,9 @@ export default function Compare() {
                   />
                   <Downbar></Downbar>
                 </div>
-                <Lineup2 />
+                <div className="one">
+                  <Lineup2 className="one" />
+                </div>
               </WeightProvider>
             </Col>
           </SortedDataProvider>
