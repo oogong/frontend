@@ -6,6 +6,7 @@ import "./styles/style.css";
 import { API_URL } from "../main/apis/core";
 import { useNavigate } from "react-router-dom";
 import { SortedDataContext } from "./sorteddatacontext";
+import { GroupColors } from "../clustering/components/colorByGroup";
 
 const Lineup = () => {
   const { sliderValues, setStockList, colorList } = useContext(WeightContext);
@@ -14,7 +15,6 @@ const Lineup = () => {
   const navigate = useNavigate();
   const { setSortedData2 } = useContext(SortedDataContext);
   const [sortedData, setSortedData] = useState([]);
-  const colorSample = ["#FAE859", "#506798", "orange", "#86CC80", "pink"];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +30,7 @@ const Lineup = () => {
 
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 1200)
+          .attr("width", 700)
           .attr("height", weightData.length * 50 + 50); // 데이터 길이에 따라 높이 조정
         // 군집 색상 바로;
 
@@ -56,7 +56,7 @@ const Lineup = () => {
         setData(d);
         const svg = d3
           .select(svgRef.current)
-          .attr("width", 1200)
+          .attr("width", 700)
           .attr("height", d.length * 50 + 100); // 데이터 길이에 따라 높이 조정
         return update(d, svg, ...sliderValues, "group1");
       });
@@ -78,7 +78,7 @@ const Lineup = () => {
         if (colorMatch) {
           return {
             ...item,
-            color: colorSample[colorMatch.id],
+            color: GroupColors[colorMatch.id],
           };
         }
         return item; // 기존 item을 그대로 반환
@@ -94,14 +94,14 @@ const Lineup = () => {
     const sortedData = data.sort((a, b) => {
       const colA =
         a.profit * sliderValues[0] +
-        a.growth * sliderValues[1] +
-        a.safety * sliderValues[2] +
+        a.safety * sliderValues[1] +
+        a.growth * sliderValues[2] +
         a.efficiency * sliderValues[3] +
         a.oogong_rate * sliderValues[4];
       const colB =
         b.profit * sliderValues[0] +
-        b.growth * sliderValues[1] +
-        b.safety * sliderValues[2] +
+        b.safety * sliderValues[1] +
+        b.growth * sliderValues[2] +
         b.efficiency * sliderValues[3] +
         b.oogong_rate * sliderValues[4];
 
@@ -113,9 +113,9 @@ const Lineup = () => {
         id: item.id,
         name: item.name,
         profitability: item.profit * sliderValues[0],
-        stability: item.safety * sliderValues[2],
+        stability: item.safety * sliderValues[1],
+        potential: item.growth * sliderValues[2],
         activity: item.efficiency * sliderValues[3],
-        potential: item.growth * sliderValues[1],
         ogoong_rate: item.oogong_rate * sliderValues[4],
       }))
     );
@@ -237,7 +237,7 @@ const Lineup = () => {
 
     rowsEnter
       .append("rect")
-      .attr("class", "growth-bar")
+      .attr("class", "safety-bar")
       .attr("y", 10)
       .attr("height", height - 20)
       .attr("fill", "#FFDD87")
@@ -245,7 +245,7 @@ const Lineup = () => {
 
     rowsEnter
       .append("rect")
-      .attr("class", "safety-bar")
+      .attr("class", "growth-bar")
       .attr("y", 10)
       .attr("height", height - 20)
       .attr("fill", "#91D600")
@@ -288,20 +288,20 @@ const Lineup = () => {
       .style("width", (d) => (d.profit * weight_d) / widthScale + "px");
 
     rowsUpdate
-      .select(".growth-bar")
+      .select(".safety-bar")
       .attr("x", (d) => 350 + (d.profit * weight_d) / widthScale)
-      .style("width", (d) => (d.growth * weight_s) / widthScale + "px");
+      .style("width", (d) => (d.safety * weight_s) / widthScale + "px");
 
     rowsUpdate
-      .select(".safety-bar")
+      .select(".growth-bar")
       .attr(
         "x",
         (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
-          (d.growth * weight_s) / widthScale
+          (d.safety * weight_s) / widthScale
       )
-      .style("width", (d) => (d.safety * weight_n) / widthScale + "px");
+      .style("width", (d) => (d.growth * weight_n) / widthScale + "px");
 
     rowsUpdate
       .select(".efficiency-bar")
@@ -310,8 +310,8 @@ const Lineup = () => {
         (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
-          (d.growth * weight_s) / widthScale +
-          (d.safety * weight_n) / widthScale
+          (d.safety * weight_s) / widthScale +
+          (d.growth * weight_n) / widthScale
       )
       .style("width", (d) => (d.efficiency * weight_m) / widthScale + "px");
 
@@ -322,8 +322,8 @@ const Lineup = () => {
         (d) =>
           350 +
           (d.profit * weight_d) / widthScale +
-          (d.growth * weight_s) / widthScale +
-          (d.safety * weight_n) / widthScale +
+          (d.safety * weight_s) / widthScale +
+          (d.growth * weight_n) / widthScale +
           (d.efficiency * weight_m) / widthScale
       )
       .style("width", (d) => (d.oogong_rate * weight_q) / widthScale + "px");
