@@ -17,6 +17,7 @@ import {
   receiveMessage,
   disconnectSocket,
   connectSocket,
+  receiveOgongRate,
 } from "../service/message";
 import {
   getMessageDirection,
@@ -30,10 +31,11 @@ import {
   getLastActiveTime,
 } from "../service/time";
 
-const Comment = ({ roomCode, roomName }) => {
+const Comment = ({ roomCode, roomName, setOgongRate }) => {
   const [userId, setUserId] = useState(""); // userId 설정
   const [messages, setMessages] = useState([]);
   const [lastActive, setLastActive] = useState(null); // 마지막 활성화 시간을 저장하는 상태
+  // const [ogongRate, setOgongRate] = useState(null);
 
   const handleMessages = (loadedMessages) => {
     setMessages(loadedMessages);
@@ -46,8 +48,12 @@ const Comment = ({ roomCode, roomName }) => {
     }
   };
 
-  const handleNewMessage = (message) => {
-    setMessages((prevMessages) => [...prevMessages, message]);
+  const handleNewOgongRate = updatedOgongRate => {
+    setOgongRate(updatedOgongRate);
+  }
+
+  const handleNewMessage = message => {
+    setMessages(prevMessages => [...prevMessages, message]);
     setLastActive(new Date()); // 새로운 메시지가 도착할 때마다 마지막 활성화 시간을 갱신
   };
 
@@ -71,6 +77,8 @@ const Comment = ({ roomCode, roomName }) => {
 
     // 새로운 메시지를 수신할 때 처리
     receiveMessage(handleNewMessage);
+
+    receiveOgongRate(handleNewOgongRate);
 
     // 컴포넌트 언마운트 시 소켓 연결 해제
     return () => {

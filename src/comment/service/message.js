@@ -67,6 +67,13 @@ export const receiveMessage = handleNewMessage => {
   });
 };
 
+export const receiveOgongRate = handleNewOgongRate => {
+  socket.on("update ogong rate", ogongRate => {
+    console.log("Received updated ogongRate", ogongRate);
+    handleNewOgongRate(ogongRate);
+  })
+}
+
 export const disconnectSocket = () => {
   if (socket) {
     console.log("Disconnecting socket");
