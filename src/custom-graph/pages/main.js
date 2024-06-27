@@ -10,8 +10,8 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
   const [sections, setSections] = useState([
     { name: "수익성", color: "#FF7676", percentage: sliderValues[0] },
     { name: "안정성", color: "#FFDD87", percentage: sliderValues[1] },
-    { name: "활동성", color: "#91D600", percentage: sliderValues[2] },
-    { name: "생산성", color: "#87D4FF", percentage: sliderValues[3] },
+    { name: "성장성", color: "#91D600", percentage: sliderValues[2] },
+    { name: "활동성", color: "#87D4FF", percentage: sliderValues[3] },
     { name: "오공 지수", color: "#C376FF", percentage: sliderValues[4] },
   ]);
 
@@ -87,36 +87,36 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
       [
         { name: "수익성", color: "#FF7676", percentage: 50 },
         { name: "안정성", color: "#FFDD87", percentage: 5 },
-        { name: "활동성", color: "#91D600", percentage: 15 },
-        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "성장성", color: "#91D600", percentage: 15 },
+        { name: "활동성", color: "#87D4FF", percentage: 15 },
         { name: "오공 지수", color: "#C376FF", percentage: 15 },
       ],
       [
         { name: "수익성", color: "#FF7676", percentage: 5 },
         { name: "안정성", color: "#FFDD87", percentage: 50 },
-        { name: "활동성", color: "#91D600", percentage: 15 },
-        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "성장성", color: "#91D600", percentage: 15 },
+        { name: "활동성", color: "#87D4FF", percentage: 15 },
         { name: "오공 지수", color: "#C376FF", percentage: 15 },
       ],
       [
         { name: "수익성", color: "#FF7676", percentage: 15 },
         { name: "안정성", color: "#FFDD87", percentage: 5 },
-        { name: "활동성", color: "#91D600", percentage: 50 },
-        { name: "생산성", color: "#87D4FF", percentage: 15 },
+        { name: "성장성", color: "#91D600", percentage: 50 },
+        { name: "활동성", color: "#87D4FF", percentage: 15 },
         { name: "오공 지수", color: "#C376FF", percentage: 15 },
       ],
       [
         { name: "수익성", color: "#FF7676", percentage: 15 },
         { name: "안정성", color: "#FFDD87", percentage: 5 },
-        { name: "활동성", color: "#91D600", percentage: 15 },
-        { name: "생산성", color: "#87D4FF", percentage: 50 },
+        { name: "성장성", color: "#91D600", percentage: 15 },
+        { name: "활동성", color: "#87D4FF", percentage: 50 },
         { name: "오공 지수", color: "#C376FF", percentage: 15 },
       ],
       [
         { name: "수익성", color: "#FF7676", percentage: 10 },
         { name: "안정성", color: "#FFDD87", percentage: 10 },
-        { name: "활동성", color: "#91D600", percentage: 10 },
-        { name: "생산성", color: "#87D4FF", percentage: 10 },
+        { name: "성장성", color: "#91D600", percentage: 10 },
+        { name: "활동성", color: "#87D4FF", percentage: 10 },
         { name: "오공 지수", color: "#C376FF", percentage: 60 },
       ],
     ];
@@ -139,11 +139,11 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
           </div>
           <div className="activity">
             <div className="activity-color"></div>
-            <p>활동성</p>
+            <p>성장성</p>
           </div>
           <div className="productivity">
             <div className="productivity-color"></div>
-            <p>생산성</p>
+            <p>활동성</p>
           </div>
           <div className="ogong">
             <div className="ogong-color"></div>
@@ -229,13 +229,11 @@ function CustomGraph({ uniqueId, title, visibleCluster }) {
             </label>
           </div>
         </div>
-        {
-          visibleCluster
-          &&
-          <PlotProvider >
+        {visibleCluster && (
+          <PlotProvider>
             <Scatter />
           </PlotProvider>
-        }
+        )}
       </div>
     </div>
   );
